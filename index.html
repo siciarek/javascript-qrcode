@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>QRCode Model 2</title>
+</head>
+
+<body style="text-align: center;padding-top:100px;background-color: #ECECEC">
+
+<canvas id="canvas"></canvas>
+
+<script src="dist/qrcode.js"></script>
+<script>
+
+    var qrcode = new QrCode('HELLO WORLD');
+
+    function drawQrCode(code, blocksize, quietZoneSize) {
+
+        blocksize = blocksize || 4;
+        quietZoneSize = quietZoneSize || 4;
+
+        var colors = {};
+        colors[code.matrix.DATA_DARK_MODULE] = '#000000';
+        colors[code.matrix.DATA_LIGHT_MODULE] = '#FFFFFF';
+        colors[code.matrix.DATA_UNDEFINED_MODULE] = '#CCCCCC';
+
+        var quietZone = quietZoneSize * blocksize;
+        var size = code.getSize() * blocksize + 2 * quietZone;
+        var grid = code.getData();
+
+        var canvas = document.getElementById('canvas');
+        canvas.setAttribute('width', size);
+        canvas.setAttribute('height', size);
+
+        var context = canvas.getContext('2d');
+        context.beginPath();
+        context.fillStyle = colors[code.matrix.DATA_LIGHT_MODULE];
+        context.rect(0, 0, size, size);
+        context.fill();
+
+        for (var top = 0; top < grid.length; top++) {
+            for (var left = 0; left < grid[0].length; left++) {
+                context.beginPath();
+                context.fillStyle = colors[grid[top][left]];
+                context.rect(quietZone + left * blocksize, quietZone + top * blocksize, blocksize, blocksize);
+                context.fill();
+            }
+        }
+    }
+
+    drawQrCode(qrcode);
+</script>
+
+</body>
+</html>

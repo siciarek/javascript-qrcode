@@ -1,3 +1,6 @@
+.idea
+temp
+
 lib-cov
 *.seed
 *.log
@@ -13,3 +16,6 @@ results
 
 npm-debug.log
 node_modules
+.sizecache.json
+
+/bin

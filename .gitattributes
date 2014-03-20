@@ -1,0 +1,17 @@
+# These files are text and should be normalized (convert crlf => lf)
+*.js     text
+*.txt     text
+*.php     text
+*.conf    text
+*.yml     text
+*.xml     text
+*.bat     text
+*.dist    text
+*.svg     text
+
+# Images should be treated as binary
+# (binary is a macro for -text -diff)
+*.png     binary
+*.gif     binary
+*.jpg    binary
+*.jpeg    binary

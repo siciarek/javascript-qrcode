@@ -1,4 +1,4 @@
 javascript-qrcode
 =================
 
-Quick Response Code (QR-Code) generator in pure javascript
+Quick Response Code (QR-Code) generator in pure javascript.
