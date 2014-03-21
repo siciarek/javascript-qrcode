@@ -5,7 +5,7 @@ module.exports = {
         var tmpdir = 'tmp';
         var dataFile = __dirname + '/../data/data.json';
         var modulesize = 4; // size (px) of data module on the code picture
-        var ecstrategy = ['M'];
+        var ecstrategy = ['L'];
 
         var mkdirp = require('mkdirp');
         var fs = require('fs');
@@ -30,7 +30,7 @@ module.exports = {
 
             for (var i = 0; i < qrcodeDataProvider.length; i += 1) {
 
-                var code = require('../../dist/nqrcode').QrCode(qrcodeDataProvider[i], ecstrategy).getData();
+                var code = require('../../dist/nqrcode').QrCode(qrcodeDataProvider[i], ['L']).getData();
 
                 var magicNumber = 'P1';
                 var width = code.length * modulesize;

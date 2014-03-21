@@ -1,5 +1,5 @@
-module.exports.QrCode = function(data) {
+module.exports.QrCode = function(data, ecstrategy) {
     'use strict';
 
-    return new QrCode(data);
+    return new QrCode(data, ecstrategy);
 };
