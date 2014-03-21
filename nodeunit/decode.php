@@ -1,4 +1,7 @@
 <?php
+/**
+ * Decode data from QR-Code image
+ */
 
 $tempdir = $argv[1];
 $count = $argv[2];

@@ -15,33 +15,25 @@ module.exports = function (config) {
             ],
 
 // base path, that will be used to resolve files and exclude
-            basePath: 'Resources/public/js',
+            basePath: '.',
 
 // list of files / patterns to load in the browser
             files: [
+
 //            // fixtures
-//            { pattern: 'qunit/*.html', watched: true, served: true, included: false },
+//            { pattern: 'qunit/data/*.js', watched: true, served: true, included: false },
 //
 //            // files to test
 //            { pattern: 'src/*.js', watched: true, served: true, included: true }
 
-                // External dependencies:
-                'http://cdnjs.cloudflare.com/ajax/libs/xregexp/2.0.0/xregexp-min.js',
-                // Mocks:
-                'qunit/mocks.js',
-
                 // Scripts to test:
-                'src/PluralizationRules.js',
-                'src/Interval.js',
-                'src/MessageSelector.js',
-                'src/String.js',
+                'dist/qrcode.*',
+
+                // data providers:
+                'qunit/data/*.js',
 
                 // Tests:
-                'qunit/config.js',
-                'qunit/data/trans.js',
-                'qunit/tests/trans.js',
-                'qunit/data/transchoice.js',
-                'qunit/tests/transchoice.js'
+                'qunit/tests/*.js'
             ],
 
 // list of files to exclude
@@ -94,13 +86,8 @@ module.exports = function (config) {
 //// - IE (only Windows)
 //// CLI --browsers Chrome,Firefox,Safari
             browsers: [
-//                'ChromeCanary'
-//                'Opera'
-//                'IE'
-//                'Chrome'
-//                'Safari'
-//                'Firefox'
-
+//                'ChromeCanary',
+//                'Opera',
                 'IE',
                 'Chrome',
                 'Safari',

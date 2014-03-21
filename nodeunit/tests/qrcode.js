@@ -1,7 +1,11 @@
 var qrcodeDataProvider = [
     '1', 'A', 'a',
+    '11111111111111111111111111111111111111111111111111111111111111111111111111110',
+    'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0',
+    'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0',
     'Apples & Oranges',
     '15071410',
+    'HTTPS://WWW.NPMJS.ORG/PACKAGE/NODEUNIT',
     'http://www.google.com',
     'ABCDE123',
     'Hello, world!',
@@ -18,6 +22,7 @@ module.exports = {
         var sys = require('sys');
         var filename;
         var modulesize = 2;
+        var ecstrategy = ['M'];
 
         mkdirp(tmpdir, function(err) {
             if(err) {
@@ -30,7 +35,7 @@ module.exports = {
         for (var i = 0; i < qrcodeDataProvider.length; i += 1) {
 
             var data = qrcodeDataProvider[i];
-            var code = require('../../dist/nqrcode').QrCode(data).getData();
+            var code = require('../../dist/nqrcode').QrCode(data, ecstrategy).getData();
 
             var magicNumber = 'P1';
             var width = code.length * modulesize;
@@ -64,7 +69,7 @@ module.exports = {
 // READ:
 
         var spawn = require('child_process').spawn;
-        var cmd = spawn('php', [ 'nodeunit/check.php', tmpdir, qrcodeDataProvider.length ]);
+        var cmd = spawn('php', [ 'nodeunit/decode.php', tmpdir, qrcodeDataProvider.length ]);
         cmd.stdout.expected = qrcodeDataProvider;
 
         cmd.stdout.on('data', function (data) {
@@ -73,7 +78,7 @@ module.exports = {
             for(var i = 0; i < this.expected.length; i++) {
                 var expected = this.expected[i];
                 var actual = ret[i];
-                t.deepEqual(actual, expected, ['exp: "', expected, '", act: "',actual, '"'].join(''));
+                t.deepEqual(actual, expected, ['file: "', i ,'.pbm", exp: "', expected, '", act: "',actual, '"'].join(''));
             }
 
             t.done();
