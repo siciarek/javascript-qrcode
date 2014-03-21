@@ -1,5 +1,6 @@
 .idea
 temp
+tmp
 
 lib-cov
 *.seed

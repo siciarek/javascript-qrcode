@@ -6,6 +6,11 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: pkg,
+
+        // Before generating any new files, remove any previously-created files.
+        clean: {
+            tests: ['tmp']
+        },
         concat: {
             dest: {
                 src: [
@@ -19,9 +24,26 @@ module.exports = function (grunt) {
                     'src/QrCode/Tiler.js',
                     'src/QrCode/Mask.js',
                     'src/QrCode/Evaluation.js',
-                    'src/QrCode/QrCode.js',
+                    'src/QrCode/QrCode.js'
                 ],
                 dest: 'dist/qrcode.js'
+            },
+            ndest: {
+                src: [
+                    'src/Utils.js',
+                    'src/QrCode/GeneratorPolynominal.js',
+                    'src/QrCode/Config.js',
+                    'src/QrCode/DataAnalyzer.js',
+                    'src/QrCode/DataEncoder.js',
+                    'src/QrCode/ErrorCorrection.js',
+                    'src/QrCode/Matrix.js',
+                    'src/QrCode/Tiler.js',
+                    'src/QrCode/Mask.js',
+                    'src/QrCode/Evaluation.js',
+                    'src/QrCode/QrCode.js',
+                    'src/module-footer.js'
+                ],
+                dest: 'dist/nqrcode.js'
             }
         },
         uglify: {
@@ -92,7 +114,7 @@ module.exports = function (grunt) {
         },
         shell: {
             nutap: {
-                command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap nodeunit/tests/trans.js',
+                command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/qrcode.js',
                 options: {
                     stdout: true,
                     stderr: true,
@@ -104,6 +126,7 @@ module.exports = function (grunt) {
     });
 
     // Load grunt plugins.
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-compare-size');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -116,11 +139,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Build task.
-    grunt.registerTask('build', ['concat', 'uglify', 'compare_size']);
+    grunt.registerTask('build', [ 'concat', 'uglify', 'compare_size' ]);
 
-    // Test task.
-    grunt.registerTask('test', ['jshint', 'qunit']);
+    // Test tasks.
+    grunt.registerTask('utest', [ 'clean', 'shell:nutap' ]);
+    grunt.registerTask('test', [ 'jshint', 'qunit' ]);
 
     // Default task.
-    grunt.registerTask('default', ['build', 'test']);
+    grunt.registerTask('default', [ 'build', 'test' ]);
 };
