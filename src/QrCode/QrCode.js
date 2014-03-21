@@ -21,8 +21,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version) {
 
     var encoder = new DataEncoder();
     var errcorrection = new ErrorCorrection();
-    var tiler, evaluator, mask;
-    var formatString, versionInformationString;
+    var tiler, mask;
     var maskinfo = {};
 
     var encdata = encoder.encode(this.info.data, this.info.version, this.info.mode, this.info.eclevel);
@@ -42,7 +41,6 @@ var QrCode = function (data, ecstrategy, maskPattern, version) {
     if (maskPattern === null) {
         var results = [];
         var evaluations = {};
-        var temp = [];
 
         for (pattern = 0; pattern < 8; pattern += 1) {
             maskinfo = mask.apply(pattern);
@@ -59,6 +57,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version) {
     }
 
     this.info.pattern = pattern;
+    this.info.datalen = this.info.data.length;
 
     maskinfo = mask.apply(pattern, this.matrix.data);
     this.matrix.data = maskinfo.data;

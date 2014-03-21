@@ -1,6 +1,7 @@
 .idea
 temp
 tmp
+coverage
 
 lib-cov
 *.seed

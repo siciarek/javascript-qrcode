@@ -21,6 +21,7 @@ ErrorCorrection.prototype.getCode = function (data, version, eclevel) {
 
         for (var i = 0; i < genpn.length; i += 1) {
             var exp = (genpn[i] + lterm) % 255;
+
             exp = this.gen.exp2int(exp);
 
             /* jshint bitwise: false */

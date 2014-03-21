@@ -11,12 +11,10 @@ Config.prototype.xorBits = function (first, second) {
 
     return (parseInt(first, 2) ^ parseInt(second, 2)).toString(2);
 };
-
 Config.prototype.getVersionInformationString = function (version) {
     'use strict';
 
     var generatorPolynominal = '1111100100101';
-    var mask = '101010000010010';
 
     var versionString = parseInt(version).toString(2);
 
@@ -56,7 +54,6 @@ Config.prototype.getVersionInformationString = function (version) {
 
     return versionString + result;
 };
-
 Config.prototype.getFormatString = function (correctionLevel, maskPattern) {
     'use strict';
 
@@ -67,7 +64,7 @@ Config.prototype.getFormatString = function (correctionLevel, maskPattern) {
     var mask = '101010000010010';
 
     var formatString = '';
-    var result = formatString;
+    var result = '';
 
     var cl = this.correctionLevels[correctionLevel].toString(2);
     while (cl.length < 2) {
@@ -123,6 +120,7 @@ Config.prototype.getFormatString = function (correctionLevel, maskPattern) {
 
     return formatString;
 };
+
 Config.prototype.correctionLevels = {
     L: 1,
     M: 0,
@@ -170,41 +168,6 @@ Config.prototype.remainderBits = {
     38: 0,
     39: 0,
     40: 0
-};
-Config.prototype.maskPatterns = {
-
-    '000': function (row, column) {
-        'use strict';
-        return (row + column) % 2 === 0;
-    },
-    '001': function (row, column) {
-        'use strict';
-        return (row) % 2 === 0;
-    },
-    '010': function (row, column) {
-        'use strict';
-        return (column) % 3 === 0;
-    },
-    '011': function (row, column) {
-        'use strict';
-        return (row + column) % 3 === 0;
-    },
-    '100': function (row, column) {
-        'use strict';
-        return (Math.floor(row / 2) + Math.floor(column / 3)) % 2 === 0;
-    },
-    '101': function (row, column) {
-        'use strict';
-        return ((row * column) % 2) + ((row * column) % 3) === 0;
-    },
-    '110': function (row, column) {
-        'use strict';
-        return (((row * column) % 2) + ((row * column) % 3)) % 2 === 0;
-    },
-    '111': function (row, column) {
-        'use strict';
-        return (((row + column) % 2) + ((row * column) % 3)) % 2 === 0;
-    }
 };
 Config.prototype.dataSizeInfo = {
     "1-L": ["19", "7", "1", "19", "(19*1) = 19"],

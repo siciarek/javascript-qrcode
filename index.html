@@ -9,12 +9,55 @@
 
 <canvas id="canvas"></canvas>
 
-<script src="dist/qrcode.js"></script>
+<script src="src/Utils.js"></script>
+<script src="src/QrCode/Config.js"></script>
+<script src="src/QrCode/GeneratorPolynominal.js"></script>
+<script src="src/QrCode/DataAnalyzer.js"></script>
+<script src="src/QrCode/DataEncoder.js"></script>
+<script src="src/QrCode/ErrorCorrection.js"></script>
+<script src="src/QrCode/Matrix.js"></script>
+<script src="src/QrCode/Tiler.js"></script>
+<script src="src/QrCode/Mask.js"></script>
+<script src="src/QrCode/Evaluation.js"></script>
+<script src="src/QrCode/QrCode.js"></script>
+
 <script>
 
-    var qrcode = new QrCode('HELLO WORLD');
+    var data = 'Hello, World!';
+    var ecstrategy = ['M'];
+    var modulesize = 5;
+    var quietZoneSize = 4;
 
-    function drawQrCode(code, blocksize, quietZoneSize) {
+    /**
+     * HTTP HttpRequest support
+     * @constructor
+     */
+    var HttpRequest = function () {
+        this.href = location.href;
+        this.host = this.href.split('?').shift();
+        this.query = this.href.split('?').pop();
+        this.params = this.getParams();
+    };
+
+    HttpRequest.prototype.constructor = HttpRequest;
+
+    HttpRequest.prototype.getParams = function () {
+        var params = {};
+        if (location.search) {
+            var parts = location.search.slice(1).split('&');
+            parts.forEach(function (part) {
+                var pair = part.split('=');
+                pair[0] = decodeURIComponent(pair[0]);
+                pair[1] = decodeURIComponent(pair[1]);
+                params[pair[0]] = (pair[1] !== 'undefined') ? pair[1] : true;
+            });
+        }
+
+        return params;
+    };
+
+
+    function draw(code, blocksize, quietZoneSize) {
 
         blocksize = blocksize || 4;
         quietZoneSize = quietZoneSize || 4;
@@ -48,7 +91,27 @@
         }
     }
 
-    drawQrCode(qrcode);
+    var request = new HttpRequest();
+
+    if (request.params.hasOwnProperty('data')) {
+        data = request.params['data'];
+    }
+
+    if (request.params.hasOwnProperty('ec')) {
+        ecstrategy = [request.params['ec']];
+    }
+
+    if (request.params.hasOwnProperty('size')) {
+        var temp = parseInt(request.params['size']);
+        modulesize = !isNaN(temp) && temp > 0 ? temp : modulesize;
+    }
+
+    var qrcode = new QrCode(data, ecstrategy);
+
+    draw(qrcode, modulesize, quietZoneSize);
+
+    console.log(qrcode.getInfo());
+
 </script>
 
 </body>

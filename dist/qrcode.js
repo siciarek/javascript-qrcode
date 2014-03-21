@@ -149,7 +149,6 @@ Config.prototype.xorBits = function (first, second) {
 
     return (parseInt(first, 2) ^ parseInt(second, 2)).toString(2);
 };
-
 Config.prototype.getVersionInformationString = function (version) {
     'use strict';
 
@@ -194,7 +193,6 @@ Config.prototype.getVersionInformationString = function (version) {
 
     return versionString + result;
 };
-
 Config.prototype.getFormatString = function (correctionLevel, maskPattern) {
     'use strict';
 
@@ -261,6 +259,7 @@ Config.prototype.getFormatString = function (correctionLevel, maskPattern) {
 
     return formatString;
 };
+
 Config.prototype.correctionLevels = {
     L: 1,
     M: 0,
@@ -308,41 +307,6 @@ Config.prototype.remainderBits = {
     38: 0,
     39: 0,
     40: 0
-};
-Config.prototype.maskPatterns = {
-
-    '000': function (row, column) {
-        'use strict';
-        return (row + column) % 2 === 0;
-    },
-    '001': function (row, column) {
-        'use strict';
-        return (row) % 2 === 0;
-    },
-    '010': function (row, column) {
-        'use strict';
-        return (column) % 3 === 0;
-    },
-    '011': function (row, column) {
-        'use strict';
-        return (row + column) % 3 === 0;
-    },
-    '100': function (row, column) {
-        'use strict';
-        return (Math.floor(row / 2) + Math.floor(column / 3)) % 2 === 0;
-    },
-    '101': function (row, column) {
-        'use strict';
-        return ((row * column) % 2) + ((row * column) % 3) === 0;
-    },
-    '110': function (row, column) {
-        'use strict';
-        return (((row * column) % 2) + ((row * column) % 3)) % 2 === 0;
-    },
-    '111': function (row, column) {
-        'use strict';
-        return (((row + column) % 2) + ((row * column) % 3)) % 2 === 0;
-    }
 };
 Config.prototype.dataSizeInfo = {
     "1-L": ["19", "7", "1", "19", "(19*1) = 19"],
@@ -1727,54 +1691,6 @@ var DataEncoder = function () {
 
 DataEncoder.prototype.constructor = DataEncoder;
 
-DataEncoder.prototype.alphanumericCharsTable = {
-    '0': 0,
-    '1': 1,
-    '2': 2,
-    '3': 3,
-    '4': 4,
-    '5': 5,
-    '6': 6,
-    '7': 7,
-    '8': 8,
-    '9': 9,
-    'A': 10,
-    'B': 11,
-    'C': 12,
-    'D': 13,
-    'E': 14,
-    'F': 15,
-    'G': 16,
-    'H': 17,
-    'I': 18,
-    'J': 19,
-    'K': 20,
-    'L': 21,
-    'M': 22,
-    'N': 23,
-    'O': 24,
-    'P': 25,
-    'Q': 26,
-    'R': 27,
-    'S': 28,
-    'T': 29,
-    'U': 30,
-    'V': 31,
-    'W': 32,
-    'X': 33,
-    'Y': 34,
-    'Z': 35,
-    ' ': 36,
-    '$': 37,
-    '%': 38,
-    '*': 39,
-    '+': 40,
-    '-': 41,
-    '.': 42,
-    '/': 43,
-    ':': 44
-};
-
 DataEncoder.prototype.encodeNumeric = function (data) {
     'use strict';
 
@@ -1944,8 +1860,59 @@ DataEncoder.prototype.encode = function (data, version, mod, ecLevel) {
         return parseInt(e, 2);
     });
 
+    var blocks = [];
+
     return output;
 };
+
+DataEncoder.prototype.alphanumericCharsTable = {
+    '0': 0,
+    '1': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    'A': 10,
+    'B': 11,
+    'C': 12,
+    'D': 13,
+    'E': 14,
+    'F': 15,
+    'G': 16,
+    'H': 17,
+    'I': 18,
+    'J': 19,
+    'K': 20,
+    'L': 21,
+    'M': 22,
+    'N': 23,
+    'O': 24,
+    'P': 25,
+    'Q': 26,
+    'R': 27,
+    'S': 28,
+    'T': 29,
+    'U': 30,
+    'V': 31,
+    'W': 32,
+    'X': 33,
+    'Y': 34,
+    'Z': 35,
+    ' ': 36,
+    '$': 37,
+    '%': 38,
+    '*': 39,
+    '+': 40,
+    '-': 41,
+    '.': 42,
+    '/': 43,
+    ':': 44
+};
+
 
 var ErrorCorrection = function () {
     'use strict';
@@ -1970,6 +1937,7 @@ ErrorCorrection.prototype.getCode = function (data, version, eclevel) {
 
         for (var i = 0; i < genpn.length; i += 1) {
             var exp = (genpn[i] + lterm) % 255;
+
             exp = this.gen.exp2int(exp);
 
             /* jshint bitwise: false */
@@ -2652,25 +2620,18 @@ Mask.prototype.constructor = Mask;
 /**
  * Applies mask
  *
- * @param patternNumber
- * @returns {*}
+ * @param {number} pattern
+ * @returns {object} mask data and evaluation results.
  */
-Mask.prototype.apply = function (patternNumber) {
+Mask.prototype.apply = function (pattern) {
     'use strict';
 
-    var data = [];
     var maskinfo = {
-        evaluator: {},
+        evaluation: {},
         data: []
     };
-    var formatString, versionInformationString;
-    var binnum = parseInt(patternNumber).toString(2);
 
-    while (binnum.length < 3) {
-        binnum = '0' + binnum;
-    }
-
-    var funct = this.config.maskPatterns[binnum];
+    var pat = this.patterns[pattern];
 
     for (var r = 0; r < this.matrix.getSize(); r += 1) {
         maskinfo.data[r] = [];
@@ -2680,23 +2641,58 @@ Mask.prototype.apply = function (patternNumber) {
                 var val = maskinfo.data[r][c];
 
                 /* jshint bitwise: false */
-                maskinfo.data[r][c] = funct(r, c) ? val ^ 1 : val;
+                maskinfo.data[r][c] = pat(r, c) ? val ^ 1 : val;
                 /* jshint bitwise: true */
             }
         }
     }
 
-    formatString = this.config.getFormatString(this.matrix.eclevel, patternNumber);
-    versionInformationString = this.config.getVersionInformationString(this.matrix.version);
+    var formatString = this.config.getFormatString(this.matrix.eclevel, pattern);
+    var versionInformationString = this.config.getVersionInformationString(this.matrix.version);
 
     this.matrix.setFormatInformationArea(formatString, maskinfo.data);
     this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
 
     var evaluation = new Evaluation(this.matrix);
-
     maskinfo.evaluation = evaluation.evaluatePattern(maskinfo.data);
 
     return maskinfo;
+};
+
+Mask.prototype.patterns = {
+
+    0: function (row, column) {
+        'use strict';
+        return (row + column) % 2 === 0;
+    },
+    1: function (row, column) {
+        'use strict';
+        return (row) % 2 === 0;
+    },
+    2: function (row, column) {
+        'use strict';
+        return (column) % 3 === 0;
+    },
+    3: function (row, column) {
+        'use strict';
+        return (row + column) % 3 === 0;
+    },
+    4: function (row, column) {
+        'use strict';
+        return (Math.floor(row / 2) + Math.floor(column / 3)) % 2 === 0;
+    },
+    5: function (row, column) {
+        'use strict';
+        return ((row * column) % 2) + ((row * column) % 3) === 0;
+    },
+    6: function (row, column) {
+        'use strict';
+        return (((row * column) % 2) + ((row * column) % 3)) % 2 === 0;
+    },
+    7: function (row, column) {
+        'use strict';
+        return (((row + column) % 2) + ((row * column) % 3)) % 2 === 0;
+    }
 };
 var Evaluation = function (matrix) {
     'use strict';
@@ -3006,6 +3002,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version) {
     }
 
     this.info.pattern = pattern;
+    this.info.datalen = this.info.data.length;
 
     maskinfo = mask.apply(pattern, this.matrix.data);
     this.matrix.data = maskinfo.data;

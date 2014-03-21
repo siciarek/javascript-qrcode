@@ -120,6 +120,7 @@
         "GeneratorPolynominal": true,
         "DataEncoder": true,
         "ErrorCorrection": true,
+        "QrCode": true,
         "Config": true
     },
     "indent"        : 4         // Specify indentation spacing

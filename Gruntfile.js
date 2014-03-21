@@ -6,8 +6,7 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: pkg,
-
-        // Before generating any new files, remove any previously-created files.
+        // Before generating new test files, remove any previously-created files.
         clean: {
             tests: ['tmp']
         },
@@ -41,7 +40,7 @@ module.exports = function (grunt) {
                     'src/QrCode/Mask.js',
                     'src/QrCode/Evaluation.js',
                     'src/QrCode/QrCode.js',
-                    'src/module-footer.js'
+                    'src/nodejs-footer.js'
                 ],
                 dest: 'dist/nqrcode.js'
             }
@@ -61,52 +60,24 @@ module.exports = function (grunt) {
                 'dist/qrcode.min.js'
             ]
         },
-        qunit: {
-            files: [
-                "qunit/*.html"
-            ]
-        },
         jshint: {
             options: {
                 jshintrc: '.jshintrc'
             },
             files: [
                 'Gruntfile.js',
-                'src/QrCode/GeneratorPolynominal.js',
-                'src/QrCode/Config.js',
-                'src/QrCode/DataAnalyzer.js',
-                'src/QrCode/DataEncoder.js',
-                'src/QrCode/ErrorCorrection.js',
-                'src/QrCode/Matrix.js',
-                'src/QrCode/Tiler.js',
-                'src/QrCode/Mask.js',
-                'src/QrCode/Evaluation.js',
-                'src/QrCode/QrCode.js',
+                'src/QrCode/*.js',
+                'src/*.js',
                 '!dist/*.min.js'
             ]
         },
-        jsdoc: {
-            dist: {
-                src: ['src/*.js', 'README.md'],
-                dest: 'doc'
-            }
-        },
-        watch: {
-            scripts: {
-                files: ['**/*.js'],
-                tasks: ['jshint'],
-                options: {
-                    spawn: false
-                }
-            }
-        },
-        karma: {
-            unit: {
-                configFile: 'karma.conf.js'
-            }
+        qunit: {
+            tests: [
+                "qunit/*.html"
+            ]
         },
         nodeunit: {
-            all: {
+            tests: {
                 src: [
                     'nodeunit/tests/*.js'
                 ]
@@ -121,6 +92,26 @@ module.exports = function (grunt) {
                     failOnError: false,
                     warnOnError: true
                 }
+            }
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
+        },
+        watch: {
+            scripts: {
+                files: ['**/*.js'],
+                tasks: ['jshint'],
+                options: {
+                    spawn: false
+                }
+            }
+        },
+        jsdoc: {
+            dist: {
+                src: ['src/*.js', 'README.md'],
+                dest: 'doc'
             }
         }
     });
@@ -147,4 +138,7 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', [ 'build', 'test' ]);
+
+    // All the tasks.
+    grunt.registerTask('all', [ 'default', 'utest' ]);
 };
