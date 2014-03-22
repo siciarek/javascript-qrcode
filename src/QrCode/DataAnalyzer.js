@@ -13,30 +13,37 @@ var DataAnalyzer = function (version) {
     this.version = parseInt(this.version);
     this.version = isNaN(this.version) ? null : parseInt(this.version);
 
-    this.modes = {
-        numeric: function (data, self) {
-            return data.match(/^\d+$/) !== null;
-        },
-        alphanumeric: function (data, self) {
-            var chars = data.split('').sort().filter(function (el, i, a) {
-                return (i === a.indexOf(el) && el.length > 0);
-            });
-
-            while (chars.length > 0) {
-                if (typeof self.encoder.alphanumericCharsTable[chars.shift()] === 'undefined') {
-                    return false;
-                }
-            }
-
-            return true;
-        },
-        kanji: function (data, self) {
-            return false; // TODO: do the research and implement
-        }
-    };
 };
 
 DataAnalyzer.prototype.constructor = DataAnalyzer;
+
+DataAnalyzer.prototype.modes = {
+    numeric: function (data, self) {
+        'use strict';
+
+        return data.match(/^\d+$/) !== null;
+    },
+    alphanumeric: function (data, self) {
+        'use strict';
+
+        var chars = data.split('').sort().filter(function (el, i, array) {
+            return (i === array.indexOf(el) && el.length > 0);
+        });
+
+        while (chars.length > 0) {
+            if (typeof self.encoder.alphanumericCharsTable[chars.shift()] === 'undefined') {
+                return false;
+            }
+        }
+
+        return true;
+    },
+    kanji: function (data, self) {
+        'use strict';
+
+        return false; // TODO: do the research and implement
+    }
+};
 
 DataAnalyzer.prototype.analyze = function (data, eclevels) {
 

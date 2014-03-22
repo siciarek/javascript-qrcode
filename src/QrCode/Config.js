@@ -127,6 +127,28 @@ Config.prototype.getBlockInfo = function (version, correctionLevel) {
 
     return this.dataSizeInfo[key];
 };
+Config.prototype.getCharacterCountIndicator = function(characterCount, mode, version) {
+    'use strict';
+
+    var characterCountIndicator = characterCount.toString(2);
+    var wordSizes = this.wordSizes[mode];
+    var wordSize = 0;
+
+    for (var key in wordSizes) {
+        if (wordSizes.hasOwnProperty(key)) {
+            var range = key.split('-').parseInt();
+            if (version >= range[0] && version <= range[1]) {
+                wordSize = wordSizes[key];
+                break;
+            }
+        }
+    }
+    while (characterCountIndicator.length < wordSize) {
+        characterCountIndicator = '0' + characterCountIndicator;
+    }
+
+    return characterCountIndicator;
+};
 
 Config.prototype.correctionLevels = {
     L: 1,
@@ -197,7 +219,6 @@ Config.prototype.dataSizeInfo = {
     "5-M": [86, 24, 2, 43, 0, 0],
     "5-Q": [62, 18, 2, 15, 2, 16],
     "5-H": [46, 22, 2, 11, 2, 12],
-
     "6-L": [136, 18, 2, 68, 0, 0],
     "6-M": [108, 16, 4, 27, 0, 0],
     "6-Q": [76, 24, 4, 19, 0, 0],

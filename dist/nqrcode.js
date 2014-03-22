@@ -265,6 +265,28 @@ Config.prototype.getBlockInfo = function (version, correctionLevel) {
 
     return this.dataSizeInfo[key];
 };
+Config.prototype.getCharacterCountIndicator = function(characterCount, mode, version) {
+    'use strict';
+
+    var characterCountIndicator = characterCount.toString(2);
+    var wordSizes = this.wordSizes[mode];
+    var wordSize = 0;
+
+    for (var key in wordSizes) {
+        if (wordSizes.hasOwnProperty(key)) {
+            var range = key.split('-').parseInt();
+            if (version >= range[0] && version <= range[1]) {
+                wordSize = wordSizes[key];
+                break;
+            }
+        }
+    }
+    while (characterCountIndicator.length < wordSize) {
+        characterCountIndicator = '0' + characterCountIndicator;
+    }
+
+    return characterCountIndicator;
+};
 
 Config.prototype.correctionLevels = {
     L: 1,
@@ -335,7 +357,6 @@ Config.prototype.dataSizeInfo = {
     "5-M": [86, 24, 2, 43, 0, 0],
     "5-Q": [62, 18, 2, 15, 2, 16],
     "5-H": [46, 22, 2, 11, 2, 12],
-
     "6-L": [136, 18, 2, 68, 0, 0],
     "6-M": [108, 16, 4, 27, 0, 0],
     "6-Q": [76, 24, 4, 19, 0, 0],
@@ -1605,30 +1626,37 @@ var DataAnalyzer = function (version) {
     this.version = parseInt(this.version);
     this.version = isNaN(this.version) ? null : parseInt(this.version);
 
-    this.modes = {
-        numeric: function (data, self) {
-            return data.match(/^\d+$/) !== null;
-        },
-        alphanumeric: function (data, self) {
-            var chars = data.split('').sort().filter(function (el, i, a) {
-                return (i === a.indexOf(el) && el.length > 0);
-            });
-
-            while (chars.length > 0) {
-                if (typeof self.encoder.alphanumericCharsTable[chars.shift()] === 'undefined') {
-                    return false;
-                }
-            }
-
-            return true;
-        },
-        kanji: function (data, self) {
-            return false; // TODO: do the research and implement
-        }
-    };
 };
 
 DataAnalyzer.prototype.constructor = DataAnalyzer;
+
+DataAnalyzer.prototype.modes = {
+    numeric: function (data, self) {
+        'use strict';
+
+        return data.match(/^\d+$/) !== null;
+    },
+    alphanumeric: function (data, self) {
+        'use strict';
+
+        var chars = data.split('').sort().filter(function (el, i, array) {
+            return (i === array.indexOf(el) && el.length > 0);
+        });
+
+        while (chars.length > 0) {
+            if (typeof self.encoder.alphanumericCharsTable[chars.shift()] === 'undefined') {
+                return false;
+            }
+        }
+
+        return true;
+    },
+    kanji: function (data, self) {
+        'use strict';
+
+        return false; // TODO: do the research and implement
+    }
+};
 
 DataAnalyzer.prototype.analyze = function (data, eclevels) {
 
@@ -1780,36 +1808,20 @@ DataEncoder.prototype.encodeBinary = function (data) {
 DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
     'use strict';
 
-    var bitdata = [];
 
-    var terminator = '0000';
     var padBytes = ['11101100', '00010001'];
 
+    // Set mode indicator and character count indicator:
+
     var modeIndicator = this.config.dataModeBitStrings[mode];
+    var characterCountIndicator = this.config.getCharacterCountIndicator(data.length, mode, version);
 
-    var wordSize = 0;
-    var wordSizes = this.config.wordSizes[mode];
-    for (var key in wordSizes) {
-        if (wordSizes.hasOwnProperty(key)) {
-            var range = key.split('-').parseInt();
-            if (version >= range[0] && version <= range[1]) {
-                wordSize = wordSizes[key];
-                break;
-            }
-        }
-    }
+    var bitdata = [
+        modeIndicator,
+        characterCountIndicator
+    ];
 
-    var blockInfo = this.config.getBlockInfo(version, ecLevel);
-    var numberOfDataCodewords = blockInfo[0];
-    var numberOfDataBits = numberOfDataCodewords * 8;
-
-    var characterCountIndicator = data.length.toString(2);
-
-    while (characterCountIndicator.length < wordSize) {
-        characterCountIndicator = '0' + characterCountIndicator;
-    }
-
-    bitdata = bitdata.concat([modeIndicator, characterCountIndicator]);
+    // Encode data for given mode:
 
     if (mode === 'numeric') {
         bitdata = bitdata.concat(this.encodeNumeric(data));
@@ -1824,18 +1836,17 @@ DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
         throw 'Mode ' + mode + ' is not supported.';
     }
 
+
     var bitstring = bitdata.join('');
+
+    // Add terminator:
+    // ------------------------------------------------------------------------------
+
+    bitstring += this.terminator(bitstring.length, version, ecLevel);
+
+    // ------------------------------------------------------------------------------
+
     var codewords = [];
-    var diff = numberOfDataBits - bitstring.length;
-
-    if (diff < 4) {
-        terminator = '';
-        for (var d = 0; d < diff; d += 1) {
-            terminator += '0';
-        }
-    }
-
-    bitstring += terminator;
 
     var i = 0;
     while (true) {
@@ -1854,6 +1865,8 @@ DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
     }
 
     // Add Pad Bytes if the String is Still too Short
+    var blockInfo = this.config.getBlockInfo(version, ecLevel);
+    var numberOfDataCodewords = blockInfo[0];
     var b = 0;
     while (codewords.length < numberOfDataCodewords) {
         codewords.push(padBytes[b % padBytes.length]);
@@ -1959,9 +1972,32 @@ DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
     var datastr = bytes.join('');
 
     // Add remainder:
+    // ------------------------------------------------------------------------------
+
     datastr += this.remainder(version);
 
+    // ------------------------------------------------------------------------------
+
     return datastr;
+};
+
+DataEncoder.prototype.terminator = function (len, version, ecLevel) {
+    'use strict';
+
+    var terminator = '0000';
+    var blockInfo = this.config.getBlockInfo(version, ecLevel);
+    var numberOfDataCodewords = blockInfo[0];
+    var numberOfDataBits = numberOfDataCodewords * 8;
+    var diff = numberOfDataBits - len;
+
+    if (diff < 4) {
+        terminator = '';
+        for (var d = 0; d < diff; d += 1) {
+            terminator += '0';
+        }
+    }
+
+    return terminator;
 };
 
 DataEncoder.prototype.remainder = function (version) {
