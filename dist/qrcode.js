@@ -2122,7 +2122,8 @@ var Matrix = function (version, eclevel) {
     this.MASK_FIXED_DARK_MODULE = 106;
 
     this.MASK_FORMAT_INFORMATION = 201;
-    this.MASK_VERSION_INFORMATION = 202;
+    this.MASK_VERSION_INFORMATION_NE = 202;
+    this.MASK_VERSION_INFORMATION_SW = 222;
     this.MASK_DATA = 255;
 
     this.version = parseInt(version);
@@ -2382,10 +2383,10 @@ Matrix.prototype.setVersionInformationArea = function (versionInformationString,
     for (; y < 6; y += 1) {
         for (i = 0; i < 3; i += 1) {
             if (bits[0].pop() === 1) {
-                this.setDarkModule(x + i, y, this.MASK_VERSION_INFORMATION, data);
+                this.setDarkModule(x + i, y, this.MASK_VERSION_INFORMATION_NE, data);
             }
             else {
-                this.setLightModule(x + i, y, this.MASK_VERSION_INFORMATION, data);
+                this.setLightModule(x + i, y, this.MASK_VERSION_INFORMATION_NE, data);
             }
         }
     }
@@ -2397,10 +2398,10 @@ Matrix.prototype.setVersionInformationArea = function (versionInformationString,
     for (; x < 6; x += 1) {
         for (i = 0; i < 3; i += 1) {
             if (bits[1].pop() === 1) {
-                this.setDarkModule(x, y + i, this.MASK_VERSION_INFORMATION, data);
+                this.setDarkModule(x, y + i, this.MASK_VERSION_INFORMATION_SW, data);
             }
             else {
-                this.setLightModule(x, y + i, this.MASK_VERSION_INFORMATION, data);
+                this.setLightModule(x, y + i, this.MASK_VERSION_INFORMATION_SW, data);
             }
         }
     }
@@ -2590,6 +2591,18 @@ Tiler.prototype.constructor = Tiler;
 Tiler.prototype.setArea = function (datastr) {
     'use strict';
 
+    var limit = -1;
+
+    // <debug>
+
+//    limit = 311;
+//    limit += 18;
+//
+//    limit = 945;
+//    limit += 1;
+
+    // </debug>
+
     var index = 0;
 
     // Bits array:
@@ -2598,6 +2611,11 @@ Tiler.prototype.setArea = function (datastr) {
     });
 
     while (bits.length > 0) {
+
+        if(limit > 0 && index > limit) {
+            break;
+        }
+
         var el = bits.shift();
 
         if (typeof el === 'undefined') {
@@ -2647,7 +2665,7 @@ Tiler.prototype.setModule = function (value, index) {
     else {
         var mval = this.al === true ? this.matrix.MASK_ALIGNMENT_PATTERN : this.mask[y][x];
 
-        if (mval !== this.matrix.MASK_UNDEFINED_MODULE) {
+        if (mval !== this.matrix.MASK_UNDEFINED_MODULE && mval !== this.matrix.MASK_VERSION_INFORMATION_NE) {
             switch (mval) {
                 case this.matrix.MASK_SEPARATOR:
                     this.datadiry = this.datadiry === this.UP ? this.DOWN : this.UP;
@@ -2655,7 +2673,9 @@ Tiler.prototype.setModule = function (value, index) {
                     x = this.datax;
                     y = this.datay;
                     break;
+
                 case this.matrix.MASK_FORMAT_INFORMATION:
+                case this.matrix.MASK_VERSION_INFORMATION_SW:
                     this.datadiry = this.datadiry === this.UP ? this.DOWN : this.UP;
 
                     if (this.ending === true) {
@@ -2678,9 +2698,15 @@ Tiler.prototype.setModule = function (value, index) {
                     break;
 
                 case this.matrix.MASK_ALIGNMENT_PATTERN:
+
                     if (this.datadiry === this.UP && this.data[y][x - 1] === this.matrix.DATA_UNDEFINED_MODULE) {
                         this.datay -= (index % 2 === 0 ? 1 : 1);
                         this.datax -= (this.al === false && index % 2 === 0 ? 1 : 0);
+
+                        if(this.mask[this.datay][x] === this.matrix.MASK_TOP_TIMER) {
+                            this.datay -= 1;
+                        }
+
                         this.al = true;
 
                         y = this.datay;
@@ -2759,7 +2785,7 @@ Mask.prototype.apply = function (pattern) {
     var versionInformationString = this.config.getVersionInformationString(this.matrix.version);
 
     this.matrix.setFormatInformationArea(formatString, maskinfo.data);
-    this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
+//    this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
 
     var evaluation = new Evaluation(this.matrix);
     maskinfo.evaluation = evaluation.evaluatePattern(maskinfo.data);

@@ -49,7 +49,7 @@ Tiler.prototype.setArea = function (datastr) {
 
     while (bits.length > 0) {
 
-        if(limit > 0 && !(index <= limit)) {
+        if(limit > 0 && index > limit) {
             break;
         }
 
