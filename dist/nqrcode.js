@@ -262,6 +262,7 @@ Config.prototype.getBlockInfo = function (version, correctionLevel) {
     'use strict';
 
     var key = version + '-' + correctionLevel;
+
     return this.dataSizeInfo[key];
 };
 
@@ -1776,10 +1777,9 @@ DataEncoder.prototype.encodeBinary = function (data) {
     return output;
 };
 
-DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
+DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
     'use strict';
 
-    var encdata = [];
     var bitdata = [];
 
     var terminator = '0000';
@@ -1860,11 +1860,15 @@ DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
         b += 1;
     }
 
-    encdata = codewords.parseInt(2);
+    return codewords.parseInt(2);
+};
 
-    // -------------------------------------------------------------------------
+DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
+    'use strict';
 
+    var encdata = this.encodeData(data, mode, version, ecLevel);
     var bytes = [];
+    var octet;
 
     var databytes = encdata.map(function (e) {
         var val = e.toString(2);
@@ -1888,23 +1892,22 @@ DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
     var nobg = {};
     var ndcg = {};
 
+    var blockInfo = this.config.getBlockInfo(version, ecLevel);
     nobg['1'] = blockInfo[2]; // Number of Blocks in Group 1
     ndcg['1'] = blockInfo[3]; // Number of Data Codewords in Each of Group 1's Blocks
-
     nobg['2'] = blockInfo[4]; // Number of Blocks in Group 2
     ndcg['2'] = blockInfo[5]; // Number of Data Codewords in Each of Group 2's Blocks
 
-    var nobsum = nobg['1'] + nobg['2'];
     var ndcmax = Math.max(ndcg['1'], ndcg['2']);
 
-    var g, c, n, index;
+    var g, b, c, n, index;
 
     for (index in nobg) {
         if (nobg.hasOwnProperty(index)) {
-            for (g = 0; g < nobg[index]; g++) {
+            for (g = 0; g < nobg[index]; g += 1) {
                 block = [];
 
-                for (c = 0; c < ndcg[index]; c++) {
+                for (c = 0; c < ndcg[index]; c += 1) {
                     block.push(parseInt(databytes.shift(), 2));
                 }
 
@@ -1925,17 +1928,17 @@ DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
     var finalEcCodewords = [];
 
     // Interleave the Data Codewords
-    for (n = 0; n < ndcmax; n++) {
-        for (b = 0; b < blocks.length; b++) {
-            if (blocks[b][n] != null) {
+    for (n = 0; n < ndcmax; n += 1) {
+        for (b = 0; b < blocks.length; b += 1) {
+            if (blocks[b][n] !== null) {
                 finalData.push(blocks[b][n]);
             }
         }
     }
 
     // Interleave the Error Correction Codewords
-    for (n = 0; n < eccblocks[0].length; n++) {
-        for (b = 0; b < eccblocks.length; b++) {
+    for (n = 0; n < eccblocks[0].length; n += 1) {
+        for (b = 0; b < eccblocks.length; b += 1) {
             var ecb = eccblocks[b];
             finalEcCodewords.push(eccblocks[b][n]);
         }
