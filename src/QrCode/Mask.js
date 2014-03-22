@@ -41,7 +41,7 @@ Mask.prototype.apply = function (pattern) {
     var versionInformationString = this.config.getVersionInformationString(this.matrix.version);
 
     this.matrix.setFormatInformationArea(formatString, maskinfo.data);
-    this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
+//    this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
 
     var evaluation = new Evaluation(this.matrix);
     maskinfo.evaluation = evaluation.evaluatePattern(maskinfo.data);

@@ -20,7 +20,8 @@ var Matrix = function (version, eclevel) {
     this.MASK_FIXED_DARK_MODULE = 106;
 
     this.MASK_FORMAT_INFORMATION = 201;
-    this.MASK_VERSION_INFORMATION = 202;
+    this.MASK_VERSION_INFORMATION_NE = 202;
+    this.MASK_VERSION_INFORMATION_SW = 222;
     this.MASK_DATA = 255;
 
     this.version = parseInt(version);
@@ -280,10 +281,10 @@ Matrix.prototype.setVersionInformationArea = function (versionInformationString,
     for (; y < 6; y += 1) {
         for (i = 0; i < 3; i += 1) {
             if (bits[0].pop() === 1) {
-                this.setDarkModule(x + i, y, this.MASK_VERSION_INFORMATION, data);
+                this.setDarkModule(x + i, y, this.MASK_VERSION_INFORMATION_NE, data);
             }
             else {
-                this.setLightModule(x + i, y, this.MASK_VERSION_INFORMATION, data);
+                this.setLightModule(x + i, y, this.MASK_VERSION_INFORMATION_NE, data);
             }
         }
     }
@@ -295,10 +296,10 @@ Matrix.prototype.setVersionInformationArea = function (versionInformationString,
     for (; x < 6; x += 1) {
         for (i = 0; i < 3; i += 1) {
             if (bits[1].pop() === 1) {
-                this.setDarkModule(x, y + i, this.MASK_VERSION_INFORMATION, data);
+                this.setDarkModule(x, y + i, this.MASK_VERSION_INFORMATION_SW, data);
             }
             else {
-                this.setLightModule(x, y + i, this.MASK_VERSION_INFORMATION, data);
+                this.setLightModule(x, y + i, this.MASK_VERSION_INFORMATION_SW, data);
             }
         }
     }

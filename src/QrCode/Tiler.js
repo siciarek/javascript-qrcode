@@ -28,6 +28,18 @@ Tiler.prototype.constructor = Tiler;
 Tiler.prototype.setArea = function (datastr) {
     'use strict';
 
+    var limit = -1;
+
+    // <debug>
+
+//    limit = 311;
+//    limit += 18;
+//
+//    limit = 945;
+//    limit += 1;
+
+    // </debug>
+
     var index = 0;
 
     // Bits array:
@@ -36,6 +48,11 @@ Tiler.prototype.setArea = function (datastr) {
     });
 
     while (bits.length > 0) {
+
+        if(limit > 0 && !(index <= limit)) {
+            break;
+        }
+
         var el = bits.shift();
 
         if (typeof el === 'undefined') {
@@ -85,7 +102,7 @@ Tiler.prototype.setModule = function (value, index) {
     else {
         var mval = this.al === true ? this.matrix.MASK_ALIGNMENT_PATTERN : this.mask[y][x];
 
-        if (mval !== this.matrix.MASK_UNDEFINED_MODULE) {
+        if (mval !== this.matrix.MASK_UNDEFINED_MODULE && mval !== this.matrix.MASK_VERSION_INFORMATION_NE) {
             switch (mval) {
                 case this.matrix.MASK_SEPARATOR:
                     this.datadiry = this.datadiry === this.UP ? this.DOWN : this.UP;
@@ -93,7 +110,9 @@ Tiler.prototype.setModule = function (value, index) {
                     x = this.datax;
                     y = this.datay;
                     break;
+
                 case this.matrix.MASK_FORMAT_INFORMATION:
+                case this.matrix.MASK_VERSION_INFORMATION_SW:
                     this.datadiry = this.datadiry === this.UP ? this.DOWN : this.UP;
 
                     if (this.ending === true) {
@@ -116,9 +135,15 @@ Tiler.prototype.setModule = function (value, index) {
                     break;
 
                 case this.matrix.MASK_ALIGNMENT_PATTERN:
+
                     if (this.datadiry === this.UP && this.data[y][x - 1] === this.matrix.DATA_UNDEFINED_MODULE) {
                         this.datay -= (index % 2 === 0 ? 1 : 1);
                         this.datax -= (this.al === false && index % 2 === 0 ? 1 : 0);
+
+                        if(this.mask[this.datay][x] === this.matrix.MASK_TOP_TIMER) {
+                            this.datay -= 1;
+                        }
+
                         this.al = true;
 
                         y = this.datay;
