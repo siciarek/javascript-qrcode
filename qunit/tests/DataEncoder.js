@@ -61,8 +61,8 @@ test('Data Encoder Test', function () {
 
     while (dataEncoderDataProvider[0].length > 0) {
         test = dataEncoderDataProvider[0].shift();
-        actual = de.encode(test.input.message, test.input.version, test.input.mode, test.input.ecLevel);
-        deepEqual(actual, test.expected, [test.input.message, test.input.version, test.input.mode, test.input.ecLevel].toString());
+        actual = de.encodeData(test.input.message, test.input.mode, test.input.version, test.input.ecLevel);
+        deepEqual(actual, test.expected, [test.input.message, test.input.mode, test.input.version, test.input.ecLevel].toString());
     }
 
     while (dataEncoderDataProvider[1].length > 0) {

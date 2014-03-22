@@ -124,6 +124,7 @@ Config.prototype.getBlockInfo = function (version, correctionLevel) {
     'use strict';
 
     var key = version + '-' + correctionLevel;
+
     return this.dataSizeInfo[key];
 };
 
