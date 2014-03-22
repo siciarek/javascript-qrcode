@@ -86,34 +86,32 @@ DataEncoder.prototype.encodeBinary = function (data) {
     return output;
 };
 
-DataEncoder.prototype.encode = function (data, version, mod, ecLevel) {
+DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
     'use strict';
 
-    var output = [];
+    var encdata = [];
     var bitdata = [];
-
-    this.mode = mod;
-    this.ecLevel = ecLevel;
 
     var terminator = '0000';
     var padBytes = ['11101100', '00010001'];
 
-    var wordSize = 0;
-    var modeIndicator = this.config.dataModeBitStrings[this.mode];
-    var wordSizes = this.config.wordSizes[this.mode];
-    var numberOfDataCodewords = parseInt(this.config.dataSizeInfo['' + version + '-' + this.ecLevel][0]);
-    var numberOfEcCodewords = parseInt(this.config.dataSizeInfo['' + version + '-' + this.ecLevel][1]);
-    var numberOfDataBits = numberOfDataCodewords * 8;
+    var modeIndicator = this.config.dataModeBitStrings[mode];
 
+    var wordSize = 0;
+    var wordSizes = this.config.wordSizes[mode];
     for (var key in wordSizes) {
         if (wordSizes.hasOwnProperty(key)) {
-            wordSize = wordSizes[key];
             var range = key.split('-').parseInt();
-            if (range[0] <= version && range[1] >= version) {
+            if (version >= range[0] && version <= range[1]) {
+                wordSize = wordSizes[key];
                 break;
             }
         }
     }
+
+    var blockInfo = this.config.getBlockInfo(version, ecLevel);
+    var numberOfDataCodewords = blockInfo[0];
+    var numberOfDataBits = numberOfDataCodewords * 8;
 
     var characterCountIndicator = data.length.toString(2);
 
@@ -123,17 +121,17 @@ DataEncoder.prototype.encode = function (data, version, mod, ecLevel) {
 
     bitdata = bitdata.concat([modeIndicator, characterCountIndicator]);
 
-    if (this.mode === 'numeric') {
+    if (mode === 'numeric') {
         bitdata = bitdata.concat(this.encodeNumeric(data));
     }
-    else if (this.mode === 'alphanumeric') {
+    else if (mode === 'alphanumeric') {
         bitdata = bitdata.concat(this.encodeAlphanumeric(data));
     }
-    else if (this.mode === 'binary') {
+    else if (mode === 'binary') {
         bitdata = bitdata.concat(this.encodeBinary(data));
     }
     else {
-        throw 'Mode ' + this.mode + ' is not supported.';
+        throw 'Mode ' + mode + ' is not supported.';
     }
 
     var bitstring = bitdata.join('');
@@ -172,13 +170,119 @@ DataEncoder.prototype.encode = function (data, version, mod, ecLevel) {
         b += 1;
     }
 
-    output = codewords.map(function (e) {
-        return parseInt(e, 2);
+    encdata = codewords.parseInt(2);
+
+    // -------------------------------------------------------------------------
+
+    var bytes = [];
+
+    var databytes = encdata.map(function (e) {
+        var val = e.toString(2);
+        while (val.length < 8) {
+            val = '0' + val;
+        }
+        return val;
     });
 
+    var groups = {
+        '1': [],
+        '2': []
+    };
+
+    var block = [];
     var blocks = [];
 
-    return output;
+    var ecc;
+    var eccblocks = [];
+
+    var nobg = {};
+    var ndcg = {};
+
+    nobg['1'] = blockInfo[2]; // Number of Blocks in Group 1
+    ndcg['1'] = blockInfo[3]; // Number of Data Codewords in Each of Group 1's Blocks
+
+    nobg['2'] = blockInfo[4]; // Number of Blocks in Group 2
+    ndcg['2'] = blockInfo[5]; // Number of Data Codewords in Each of Group 2's Blocks
+
+    var nobsum = nobg['1'] + nobg['2'];
+    var ndcmax = Math.max(ndcg['1'], ndcg['2']);
+
+    var g, c, n, index;
+
+    for (index in nobg) {
+        if (nobg.hasOwnProperty(index)) {
+            for (g = 0; g < nobg[index]; g++) {
+                block = [];
+
+                for (c = 0; c < ndcg[index]; c++) {
+                    block.push(parseInt(databytes.shift(), 2));
+                }
+
+                ecc = this.ec.getCode(block, version, ecLevel);
+                eccblocks.push(ecc);
+
+                while (block.length < ndcmax) {
+                    block.push(null);
+                }
+
+                groups[index][g] = block;
+                blocks.push(block);
+            }
+        }
+    }
+
+    var finalData = [];
+    var finalEcCodewords = [];
+
+    // Interleave the Data Codewords
+    for (n = 0; n < ndcmax; n++) {
+        for (b = 0; b < blocks.length; b++) {
+            if (blocks[b][n] != null) {
+                finalData.push(blocks[b][n]);
+            }
+        }
+    }
+
+    // Interleave the Error Correction Codewords
+    for (n = 0; n < eccblocks[0].length; n++) {
+        for (b = 0; b < eccblocks.length; b++) {
+            var ecb = eccblocks[b];
+            finalEcCodewords.push(eccblocks[b][n]);
+        }
+    }
+
+    finalData = finalData.concat(finalEcCodewords);
+
+    while (finalData.length > 0) {
+        octet = finalData.shift().toString(2);
+
+        while (octet.length < 8) {
+            octet = '0' + octet;
+        }
+
+        bytes.push(octet);
+    }
+
+    var datastr = bytes.join('');
+
+    // Add remainder:
+    datastr += this.remainder(version);
+
+    return datastr;
+};
+
+DataEncoder.prototype.remainder = function (version) {
+    'use strict';
+
+    var rb = this.config.remainderBits[version];
+    var remainder = '';
+
+    while (rb > 0) {
+        remainder += '0';
+        rb -= 1;
+    }
+
+    return remainder;
 };
 
 DataEncoder.prototype.alphanumericCharsTable = {

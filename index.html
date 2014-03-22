@@ -28,8 +28,8 @@
     var modulesize = 5;
     var quietZoneSize = 4;
 
-    data = "And now, the end is near\nAnd so I face the final curtain\nMy friend, I'll say it clear\nI will state my...";
-    ecstrategy = ['L'];
+    data = 'There\\\'s a frood who really knows where his towel is!';
+    data =  "And now, the end is near\nAnd so I face the final curtain\nMy friend, I'll s";
 
     /**
      * HTTP HttpRequest support
@@ -108,7 +108,7 @@
         modulesize = !isNaN(temp) && temp > 0 ? temp : modulesize;
     }
 
-    var qrcode = new QrCode(data, ecstrategy);
+    var qrcode = new QrCode(data, ['Q']);
 
     draw(qrcode, modulesize, quietZoneSize);
 

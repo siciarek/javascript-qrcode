@@ -1,9 +1,10 @@
 /**
  * Quick Response Model 2 Code generator
  *
- * @param data raw data, default 'QRCODE'
- * @param ecstrategy error correction strategy, default ['M']
- * @param maskPattern force mask pattern, default null
+ * @param {string} data raw data, default 'QRCODE'
+ * @param {array} ecstrategy error correction strategy, default ['M']
+ * @param {number|null} maskPattern force mask pattern, default null
+ * @param {number} version version number
  * @constructor
  */
 var QrCode = function (data, ecstrategy, maskPattern, version) {
@@ -16,27 +17,25 @@ var QrCode = function (data, ecstrategy, maskPattern, version) {
 
     this.info = {};
 
-    var analyzer = new DataAnalyzer(version);
+    var analyzer, encoder, tiler, mask;
+    var datastr;
+    var maskinfo = {};
+    var pattern = 0;
+
+    analyzer = new DataAnalyzer(version);
     this.info = analyzer.analyze(data, ecstrategy);
 
-    var encoder = new DataEncoder();
-    var errcorrection = new ErrorCorrection();
-    var tiler, mask;
-    var maskinfo = {};
-
-    var encdata = encoder.encode(this.info.data, this.info.version, this.info.mode, this.info.eclevel);
-    var ecc = errcorrection.getCode(encdata, this.info.version, this.info.eclevel);
+    encoder = new DataEncoder();
+    datastr = encoder.encode(data, this.info.mode, this.info.version, this.info.eclevel);
 
     this.matrix = new Matrix(this.info.version, this.info.eclevel);
     this.matrix.setStaticAreas();
     this.matrix.setReservedAreas();
 
     tiler = new Tiler(this.matrix);
-    tiler.setArea(encdata, ecc);
+    tiler.setArea(datastr);
 
     mask = new Mask(this.matrix);
-
-    var pattern = 0;
 
     if (maskPattern === null) {
         var results = [];

@@ -25,51 +25,10 @@ var Tiler = function (matrix) {
 
 Tiler.prototype.constructor = Tiler;
 
-Tiler.prototype.remainder = function () {
-    'use strict';
-
-    var rb = this.matrix.config.remainderBits[this.matrix.version];
-    var remainder = '';
-    while (rb > 0) {
-        remainder += '0';
-        rb -= 1;
-    }
-
-    return remainder;
-};
-
-Tiler.prototype.setArea = function (data, ecc) {
+Tiler.prototype.setArea = function (datastr) {
     'use strict';
 
     var index = 0;
-    var bytes = [];
-
-    var databytes = data.map(function (e) {
-        var val = e.toString(2);
-        while (val.length < 8) {
-            val = '0' + val;
-        }
-        return val;
-    });
-
-    var eccbytes = ecc.map(function (e) {
-        var val = e.toString(2);
-        while (val.length < 8) {
-            val = '0' + val;
-        }
-        return val;
-    });
-
-    // TODO: block support
-
-    bytes = bytes.concat(databytes);
-    bytes = bytes.concat(eccbytes);
-
-    // ---------------------------
-
-    // Add remainder:
-    var datastr = bytes.join('');
-    datastr += this.remainder();
 
     // Bits array:
     var bits = datastr.split('').map(function (e) {
