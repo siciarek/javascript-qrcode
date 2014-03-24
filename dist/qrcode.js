@@ -2591,28 +2591,24 @@ Tiler.prototype.constructor = Tiler;
 Tiler.prototype.setArea = function (datastr) {
     'use strict';
 
-    var limit = -1;
-
-    // <debug>
-
-//    limit = 311;
-//    limit += 18;
-//
-//    limit = 945;
-//    limit += 1;
-
-    // </debug>
-
-    var index = 0;
-
     // Bits array:
     var bits = datastr.split('').map(function (e) {
         return parseInt(e);
     });
 
-    while (bits.length > 0) {
+    var index = 0;
 
-        if(limit > 0 && index > limit) {
+    // <debug>
+    var limit = -1;
+
+//    limit = 922;
+//    limit += 4;
+
+    // </debug>
+
+    while (true) {
+
+        if (limit > 0 && index > limit) {
             break;
         }
 
@@ -2629,6 +2625,43 @@ Tiler.prototype.setArea = function (datastr) {
             this.setModule(el, index);
         }
 
+        if (ret === 110) {
+            index += 1;
+        }
+
+        if (ret === 200) {
+
+            var value = null;
+            
+            for (var i = 0; i < 5; i += 1) {
+                value = bits.shift();
+                this.datay += 1;
+
+                if (value === 1) {
+                    this.matrix.setDarkModule(this.datax, this.datay, this.matrix.MASK_DATA);
+                }
+                else {
+                    this.matrix.setLightModule(this.datax, this.datay, this.matrix.MASK_DATA);
+                }
+            }
+
+            this.datay += 2;
+            this.datax += 1;
+            this.datadiry = this.DOWN;
+            index += 1;
+
+            value = bits.shift();
+
+            if (value === 1) {
+                this.matrix.setDarkModule(this.datax, this.datay, this.matrix.MASK_DATA);
+            }
+            else {
+                this.matrix.setLightModule(this.datax, this.datay, this.matrix.MASK_DATA);
+            }
+
+            continue;
+        }
+
         index += 1;
     }
 };
@@ -2643,6 +2676,8 @@ Tiler.prototype.setModule = function (value, index) {
         x += index % 2 === 0 ? 0 : this.datadirx;
         y += index % 2 === 0 ? this.datadiry : 0;
     }
+
+    var ret = null;
 
     if (typeof this.mask[y] === 'undefined') {
         if (this.datax === 10) {
@@ -2703,11 +2738,12 @@ Tiler.prototype.setModule = function (value, index) {
                         this.datay -= (index % 2 === 0 ? 1 : 1);
                         this.datax -= (this.al === false && index % 2 === 0 ? 1 : 0);
 
-                        if(this.mask[this.datay][x] === this.matrix.MASK_TOP_TIMER) {
-                            this.datay -= 1;
-                        }
-
                         this.al = true;
+
+                        if (this.al === true && this.mask[this.datay][x] === this.matrix.MASK_TOP_TIMER) {
+                            this.datay -= 1;
+                            ret = 110;
+                        }
 
                         y = this.datay;
                         x = this.datax;
@@ -2725,11 +2761,31 @@ Tiler.prototype.setModule = function (value, index) {
         }
     }
 
+    if (this.mask[y][x] === this.matrix.MASK_VERSION_INFORMATION_NE) {
+        this.datay = 0;
+        this.datax -= 3;
+        x = this.datax;
+        y = this.datay;
+
+        if (value === 1) {
+            this.matrix.setDarkModule(x, y, this.matrix.MASK_DATA);
+        }
+        else {
+            this.matrix.setLightModule(x, y, this.matrix.MASK_DATA);
+        }
+
+        return 200;
+    }
+
     if (value === 1) {
         this.matrix.setDarkModule(x, y, this.matrix.MASK_DATA);
     }
     else {
         this.matrix.setLightModule(x, y, this.matrix.MASK_DATA);
+    }
+
+    if (ret !== null) {
+        return ret;
     }
 
     if (this.al === true && this.mask[y - 1][x + 1] === this.matrix.MASK_UNDEFINED_MODULE) {
@@ -2741,7 +2797,6 @@ Tiler.prototype.setModule = function (value, index) {
     this.datay = y;
     return 1;
 };
-
 var Mask = function (matrix) {
     'use strict';
 
@@ -2785,7 +2840,7 @@ Mask.prototype.apply = function (pattern) {
     var versionInformationString = this.config.getVersionInformationString(this.matrix.version);
 
     this.matrix.setFormatInformationArea(formatString, maskinfo.data);
-//    this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
+    this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
 
     var evaluation = new Evaluation(this.matrix);
     maskinfo.evaluation = evaluation.evaluatePattern(maskinfo.data);
