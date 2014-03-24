@@ -30,7 +30,7 @@ module.exports = {
 
             for (var i = 0; i < qrcodeDataProvider.length; i += 1) {
 
-                var qrcode = require('../../dist/nqrcode').QrCode(qrcodeDataProvider[i].data, ['L']);
+                var qrcode = require('../../tasks/qrcode').QrCode(qrcodeDataProvider[i].data, ['L']);
                 var code = qrcode.getData();
                 actual = [qrcode.getSize(), qrcode.getSize()];
                 expected = qrcodeDataProvider[i].size;

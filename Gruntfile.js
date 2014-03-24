@@ -42,7 +42,7 @@ module.exports = function (grunt) {
                     'src/QrCode/QrCode.js',
                     'src/nodejs-footer.js'
                 ],
-                dest: 'dist/nqrcode.js'
+                dest: 'tasks/qrcode.js'
             }
         },
         uglify: {

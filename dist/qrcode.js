@@ -2632,7 +2632,7 @@ Tiler.prototype.setArea = function (datastr) {
         if (ret === 200) {
 
             var value = null;
-            
+
             for (var i = 0; i < 5; i += 1) {
                 value = bits.shift();
                 this.datay += 1;
