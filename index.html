@@ -2,12 +2,198 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <title>QR Code Model 2</title>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css"/>
+
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto+Slab|Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic&subset=latin-ext);
+
+        body {
+            background-color: #FFFFFF;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+        }
+
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            color: #555555 !important;
+            font-family: 'Roboto Slab', serif;
+            line-height: 1.3;
+        }
+
+        .navbar-brand {
+            font-family: 'Roboto Slab', serif;
+        }
+
+        #canvas {
+            image-rendering: -moz-crisp-edges; /* FF 6.0+ */
+            image-rendering: -webkit-optimize-contrast; /* Webkit */
+            /*  (Safari now, Chrome soon) */
+            image-rendering: -o-crisp-edges; /* OS X & Windows Opera (12.02+) */
+            image-rendering: optimize-contrast; /* Possible future browsers. */
+            -ms-interpolation-mode: nearest-neighbor; /* IE */
+        }
+
+        .row .canvas {
+            padding-top: 32px;
+            padding-bottom: 32px;
+            background-color: #EEEEEE;
+            border: 1px solid #CCCCCC;
+            border-radius: 4px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .page-header {
+            margin-top: 0;
+        }
+
+        form.form-horizontal textarea {
+            resize: vertical;
+        }
+
+        form.form-horizontal .input-group label {
+            min-width: 130px;
+            text-align: right;
+            vertical-align: top;
+            padding-top: 9px;
+        }
+
+        form.form-horizontal .input-group {
+            margin-bottom: 8px;
+        }
+
+    </style>
 </head>
 
 <body>
 
-<canvas id="canvas"></canvas>
+<div id="wrap">
+
+    <div class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+                    <i class="icon-qrcode"></i>
+                    QR Code Model 2
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a title="References" class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="icon-book icon-large"></i>
+                            References
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header">Inventor’s Page</li>
+                            <li><a target="_blank" href="http://www.qrcode.com/en/">QRcode.com｜DENSO WAVE</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Info</li>
+                            <li><a target="_blank" href="http://en.wikipedia.org/wiki/QR_code">QR code - Wikipedia, the free encyclopedia</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Tutorials</li>
+                            <li><a target="_blank" href="http://www.thonky.com/qr-code-tutorial/">QR Code Tutorial</a></li>
+                            <li><a target="_blank" href="http://www.swetake.com/qrcode/index-e.html">QRCode (Tutorial and demo)</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">QR Code Desktop Reader</li>
+                            <li><a target="_blank" href="http://www.codetwo.pl/freeware/qr-code-desktop-reader/">CodeTwo QR Code Desktop Reader</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a target="_blank" title="Tests" href="qunit/index.src.html">
+                            <i class="icon-wrench icon-large"></i>
+                            Tests
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h1>
+                        <i class="icon-qrcode text-muted"></i>
+                        QR Code Model 2
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal">
+
+                    <div class="input-group">
+                        <label class="input-group-addon" for="data">Data</label>
+                        <textarea name="data" id="data" class="form-control" rows="5" placeholder="Insert textual data">QR Code Model 2</textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-group-addon" for="ec">Error Correction</label>
+                        <select name="ec" id="ec" class="form-control">
+                            <option value="L">Level L (Low) ~7% of codewords can be restored.</option>
+                            <option value="M" selected="selected">Level M (Medium) ~15% of codewords can be restored.</option>
+                            <option value="Q">Level Q (Quartile) ~25% of codewords can be restored.</option>
+                            <option value="H">Level H (High) ~30% of codewords can be restored.</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-group-addon" for="version">Version</label>
+                        <select name="version" id="version" class="form-control">
+                            <option value="" selected="selected">Auto</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-group-addon" for="size">Module Size</label>
+                        <select name="size" id="size" class="form-control">
+                            <option value="2">Small</option>
+                            <option value="4" selected="selected">Medium</option>
+                            <option value="8">Large</option>
+                            <option value="12">Extra Large</option>
+                        </select>
+                    </div>
+
+                    <a href="javascript:void(null)" id="generate-qrcode" class="btn btn-default btn-lg pull-right">
+                        Generate
+                    </a>
+                </form>
+            </div>
+            <div class="col-md-6 canvas center">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//cdn.jsdelivr.net/jquery.cookie/1.3.1/jquery.cookie.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
 <script src="src/Utils.js"></script>
 <script src="src/QrCode/Config.js"></script>
@@ -25,13 +211,10 @@
 
     var modulesize = 4;
     var quietZoneSize = 4;
-    var ecstrategy = ['L'];
     var maskPattern = null;
-    var data = null;
-
-    // L
-    data = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquam tincidunt eleifend. Nam imperdiet ligula eu libero interdum pos.';
-    maskPattern = 2;
+    var version = null;
+    var data = 'QR Code Model 2';
+    var ecstrategy = ['M'];
 
     /**
      * HTTP HttpRequest support
@@ -109,17 +292,56 @@
         maskPattern = request.params['mp'];
     }
 
+    if (request.params.hasOwnProperty('version')) {
+        version = request.params['version'];
+    }
+
     if (request.params.hasOwnProperty('size')) {
         var temp = parseInt(request.params['size']);
         modulesize = !isNaN(temp) && temp > 0 ? temp : modulesize;
     }
 
-    var qrcode = new QrCode(data, ecstrategy, maskPattern);
+    var qrcode = new QrCode(data, ecstrategy, maskPattern, version);
 
     draw(qrcode, modulesize, quietZoneSize);
 
     console.log(qrcode.getInfo());
 
+</script>
+
+<script>
+
+    function clearCanvas(context, canvas) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var w = canvas.width;
+        canvas.width = 1;
+        canvas.width = w;
+    }
+
+    $(document).ready(function () {
+        $('#generate-qrcode').click(function (e) {
+            var quietZoneSize = 4;
+            var maskPattern = null;
+            var data = $('.form-horizontal *[name="data"]').val();
+            var ec = $('.form-horizontal *[name="ec"]').val();
+            var version = $('.form-horizontal *[name="version"]').val();
+            var modulesize = $('.form-horizontal *[name="size"]').val();
+
+            var ecstrategy = [ec];
+
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            context.webkitImageSmoothingEnabled = false;
+
+            clearCanvas(context, canvas);
+
+            var qrcode = new QrCode(data, ecstrategy, maskPattern, version);
+
+            draw(qrcode, modulesize, quietZoneSize);
+
+            console.log(qrcode.getInfo());
+        });
+    });
 </script>
 
 </body>
