@@ -30,6 +30,15 @@
             font-family: 'Roboto Slab', serif;
         }
 
+        strong.label {
+            color: #555555 !important;
+            font-size: 1em;
+            display: inline-block;
+            width: 130px;
+            text-align: right;
+            margin-right: 4px
+        }
+
         #canvas {
             image-rendering: -moz-crisp-edges; /* FF 6.0+ */
             image-rendering: -webkit-optimize-contrast; /* Webkit */
@@ -110,7 +119,8 @@
                             <li><a target="_blank" href="http://www.swetake.com/qrcode/index-e.html">QRCode (Tutorial and demo)</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">QR Code Desktop Reader</li>
-                            <li><a target="_blank" href="http://www.codetwo.pl/freeware/qr-code-desktop-reader/">CodeTwo QR Code Desktop Reader</a></li>
+                            <li><a target="_blank" href="http://www.codetwo.pl/freeware/qr-code-desktop-reader/">CodeTwo QR Code Desktop Reader</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -180,12 +190,25 @@
                     </div>
 
                     <a href="javascript:void(null)" id="generate-qrcode" class="btn btn-default btn-lg pull-right">
+                        <i class="icon-cog text-muted"></i>
                         Generate
                     </a>
                 </form>
             </div>
-            <div class="col-md-6 canvas center">
-                <canvas id="canvas"></canvas>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12 canvas center">
+                        <canvas id="canvas"></canvas>
+                    </div>
+                    <div class="col-md-12">
+                        <h3>
+                            <i class="icon-info-sign text-muted"></i>
+                            Info
+                        </h3>
+
+                        <div id="info"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -243,6 +266,41 @@
 
         return params;
     };
+
+    function setInfo(info) {
+
+        console.log(info);
+
+        var fields = {
+            data: 'Data',
+            version: 'Version',
+            mode: 'Mode',
+            eclevel: 'Error Correction',
+            pattern: 'Mask Pattern',
+            capacity: 'Capacity',
+            datalen: 'Data Length'
+        };
+
+        var html = '';
+
+        html += '<ul class="list-group">';
+        for (var key in fields) {
+            if (fields.hasOwnProperty(key) && info.hasOwnProperty(key)) {
+                var value = info[key];
+                var field = fields[key];
+
+                if (key === 'eclevel') {
+                    value = $('select[name="ec"]').find('option[value="' + value + '"]').text();
+                }
+
+                var label = '<strong class="label">' + field + ':</strong> ';
+                html += '<li class="list-group-item">' + label + value + '</li>';
+            }
+        }
+        html += '</ul>';
+
+        $('#info').html(html);
+    }
 
     function draw(code, blocksize, quietZoneSize) {
 
@@ -305,7 +363,7 @@
 
     draw(qrcode, modulesize, quietZoneSize);
 
-    console.log(qrcode.getInfo());
+    setInfo(qrcode.getInfo());
 
 </script>
 
@@ -339,7 +397,7 @@
 
             draw(qrcode, modulesize, quietZoneSize);
 
-            console.log(qrcode.getInfo());
+            setInfo(qrcode.getInfo());
         });
     });
 </script>
