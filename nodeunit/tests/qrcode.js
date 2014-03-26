@@ -77,7 +77,7 @@ module.exports = {
                 for (var i = 0; i < this.expected.length; i++) {
                     var expected = this.expected[i];
                     var actual = ret[i];
-                    t.deepEqual(actual, expected, ['file: "', tmpdir + '/' + i , '.pbm", exp: "', expected, '", act: "', JSON.stringify(actual), '"'].join(''));
+                    t.deepEqual(actual, expected, 'file: "' + tmpdir + '/' + i + '.pbm');
                 }
 
                 t.done();

@@ -7,13 +7,14 @@
  * @param {number} version version number
  * @constructor
  */
-var QrCode = function (data, ecstrategy, maskPattern, version) {
+var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {
     'use strict';
 
     data = data || 'QRCODE';
     ecstrategy = ecstrategy || ['M'];
     maskPattern = maskPattern || null;
     version = version || null;
+    dataOnly = dataOnly || false;
 
     this.info = {};
 
@@ -34,6 +35,10 @@ var QrCode = function (data, ecstrategy, maskPattern, version) {
 
     tiler = new Tiler(this.matrix);
     tiler.setArea(datastr);
+
+    if(dataOnly === true) {
+        return;
+    }
 
     mask = new Mask(this.matrix);
 
