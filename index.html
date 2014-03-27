@@ -30,13 +30,22 @@
             font-family: 'Roboto Slab', serif;
         }
 
-        strong.label {
+        .info div {
+            vertical-align: top;
+            display: inline-block;
+            width: 65%;
+        }
+
+        .info div.label {
             color: #555555 !important;
             font-size: 1em;
-            display: inline-block;
             width: 130px;
             text-align: right;
             margin-right: 4px
+        }
+
+        .info div.label:after {
+            content: ':'
         }
 
         #canvas {
@@ -48,16 +57,13 @@
             -ms-interpolation-mode: nearest-neighbor; /* IE */
         }
 
-        .row .canvas {
+        .canvas {
+            text-align: center;
             padding-top: 32px;
             padding-bottom: 32px;
             background-color: #EEEEEE;
             border: 1px solid #CCCCCC;
             border-radius: 4px;
-        }
-
-        .center {
-            text-align: center;
         }
 
         .page-header {
@@ -85,7 +91,6 @@
 <body>
 
 <div id="wrap">
-
     <div class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -147,8 +152,8 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6">
-                <form class="form-horizontal">
+            <div class="col-md-5">
+                <form class="form-horizontal qrcode-form">
 
                     <div class="input-group">
                         <label class="input-group-addon" for="data">Data</label>
@@ -168,19 +173,7 @@
                     <div class="input-group">
                         <label class="input-group-addon" for="version">Version</label>
                         <select name="version" id="version" class="form-control">
-                            <option value="" selected="selected">Auto</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
+                            <option value="0" selected="selected">Auto</option>
                         </select>
                     </div>
 
@@ -189,29 +182,35 @@
                         <select name="size" id="size" class="form-control">
                             <option value="2">Small</option>
                             <option value="4" selected="selected">Medium</option>
-                            <option value="8">Large</option>
+                            <option value="6">Large</option>
                         </select>
                     </div>
+
+                    <br/>
 
                     <a href="javascript:void(null)" id="generate-qrcode" class="btn btn-default btn-lg pull-right">
                         <i class="icon-cog text-muted"></i>
                         Generate
                     </a>
+
+                    <div class="clearfix"></div>
+                    <br/>
+                    <br/>
                 </form>
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-12 canvas center">
-                        <canvas id="canvas"></canvas>
-                    </div>
-                    <div class="col-md-12">
-                        <h3>
-                            <i class="icon-info-sign text-muted"></i>
-                            Info
-                        </h3>
+            <div class="col-md-7">
 
-                        <div id="info"></div>
-                    </div>
+                <div class="canvas center">
+                    <canvas id="canvas"></canvas>
+                </div>
+
+                <div>
+                    <h3>
+                        <i class="icon-info-sign text-muted"></i>
+                        Info
+                    </h3>
+
+                    <div id="info"></div>
                 </div>
             </div>
         </div>
@@ -243,8 +242,7 @@
     var data = 'QR Code Model 2';
     var ecstrategy = ['M'];
 
-    // data = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in lorem mollis, mattis magna quis, mollis orci. Sed non laoreet mi. Nunc dictum dui sed.';
-    // ecstrategy = ['L'];
+    data = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in lorem mollis, mattis magna quis, mollis orci. Sed non laoreet mi. Nunc dictum dui sed.';
 
     /**
      * HTTP HttpRequest support
@@ -277,18 +275,18 @@
     function setInfo(info) {
 
         var fields = {
-            data: 'Data',
             version: 'Version',
             mode: 'Mode',
             eclevel: 'Error Correction',
             pattern: 'Mask Pattern',
-            capacity: 'Capacity',
-            datalen: 'Data Length'
+            capacity: 'Max Capacity',
+            datalen: 'Data Length',
+            data: 'Data'
         };
 
         var html = '';
 
-        html += '<ul class="list-group">';
+        html += '<ul class="list-group info">';
         for (var key in fields) {
             if (fields.hasOwnProperty(key) && info.hasOwnProperty(key)) {
                 var value = info[key];
@@ -298,8 +296,7 @@
                     value = $('select[name="ec"]').find('option[value="' + value + '"]').text();
                 }
 
-                var label = '<strong class="label">' + field + ':</strong> ';
-                html += '<li class="list-group-item">' + label + value + '</li>';
+                html += '<li class="list-group-item"><div class="label">' + field + '</div><div>' + value + '</div></li>';
             }
         }
         html += '</ul>';
@@ -333,10 +330,12 @@
 
         for (var top = 0; top < grid.length; top++) {
             for (var left = 0; left < grid[0].length; left++) {
-                context.beginPath();
-                context.fillStyle = colors[grid[top][left]];
-                context.rect(quietZone + left * blocksize, quietZone + top * blocksize, blocksize, blocksize);
-                context.fill();
+                if (grid[top][left] !== 0) {
+                    context.beginPath();
+                    context.fillStyle = colors[grid[top][left]];
+                    context.rect(quietZone + left * blocksize, quietZone + top * blocksize, blocksize, blocksize);
+                    context.fill();
+                }
             }
         }
     }
@@ -364,11 +363,13 @@
         modulesize = !isNaN(temp) && temp > 0 ? temp : modulesize;
     }
 
-    var qrcode = new QrCode(data, ecstrategy, maskPattern, version);
+    function run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize) {
+        var qrcode = new QrCode(data, ecstrategy, maskPattern, version);
+        draw(qrcode, modulesize, quietZoneSize);
+        setInfo(qrcode.getInfo());
+    }
 
-    draw(qrcode, modulesize, quietZoneSize);
-
-    setInfo(qrcode.getInfo());
+    run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize);
 
 </script>
 
@@ -382,12 +383,39 @@
     }
 
     $(document).ready(function () {
-        $('#generate-qrcode').click(function (e) {
+
+        $('.qrcode-form textarea').val(data);
+
+        for (var o = 1; o <= 40; o++) {
+            var option = '<option value="' + o + '">' + o + '</option>';
+            $('.qrcode-form select[name="version"]').append(option);
+        }
+
+        $('.qrcode-form')
+                .on('change', 'select', function () {
+                    var self = $(this);
+
+                    if (self.attr('name') === 'version') {
+                        if (self.val() > 32) {
+                            $('#size').val(2);
+                        } else {
+                            $('#size').val(4);
+                        }
+                    }
+
+                    $('#generate-qrcode').trigger('click');
+                })
+                .on('keyup', 'textarea', function () {
+                    $('#generate-qrcode').trigger('click');
+                });
+
+        $('#generate-qrcode').click(function () {
             var quietZoneSize = 4;
             var maskPattern = null;
             var data = $('.form-horizontal *[name="data"]').val();
             var ec = $('.form-horizontal *[name="ec"]').val();
             var version = $('.form-horizontal *[name="version"]').val();
+            version = version == 0 ? null : version;
             var modulesize = $('.form-horizontal *[name="size"]').val();
 
             var ecstrategy = [ec];
@@ -398,11 +426,7 @@
 
             clearCanvas(context, canvas);
 
-            var qrcode = new QrCode(data, ecstrategy, maskPattern, version);
-
-            draw(qrcode, modulesize, quietZoneSize);
-
-            setInfo(qrcode.getInfo());
+            run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize);
         });
     });
 </script>

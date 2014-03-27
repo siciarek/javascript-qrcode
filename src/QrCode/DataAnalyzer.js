@@ -49,13 +49,13 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
 
     'use strict';
 
-    data = data || 'QRCODE';
+    var defaultEcLevels = ['H', 'Q', 'M', 'L'];
 
-    if(typeof data === 'undefined' || data.trim().length === 0) {
+    if(typeof data === 'undefined') {
         throw 'No data were given.';
     }
 
-    eclevels = eclevels || ['H', 'Q', 'M', 'L'];
+    eclevels = eclevels || defaultEcLevels;
 
     var result = {
         data: data,
@@ -73,6 +73,20 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
                 break;
             }
         }
+    }
+
+    var inRange = false;
+    var len = data.length;
+
+    for(var i = 0; i < eclevels.length; i += 1) {
+        var range = this.config.getCapacityRange(result.mode, eclevels[i]);
+        if(len >= range.min && len <= range.max) {
+            inRange = true;
+        }
+    }
+
+    if(inRange === false) {
+        throw 'Data size is out of possible range.';
     }
 
     for (var version in this.config.characterCapacities) {

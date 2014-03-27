@@ -5,118 +5,130 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        pkg: pkg,
-        // Before generating new test files, remove any previously-created files.
-        clean: {
-            tests: ['tmp']
-        },
-        concat: {
-            dest: {
-                src: [
-                    'src/Utils.js',
-                    'src/QrCode/GeneratorPolynominal.js',
-                    'src/QrCode/Config.js',
-                    'src/QrCode/DataAnalyzer.js',
-                    'src/QrCode/DataEncoder.js',
-                    'src/QrCode/ErrorCorrection.js',
-                    'src/QrCode/Matrix.js',
-                    'src/QrCode/Tiler.js',
-                    'src/QrCode/Mask.js',
-                    'src/QrCode/Evaluation.js',
-                    'src/QrCode/QrCode.js'
-                ],
-                dest: 'dist/qrcode.js'
+            pkg: pkg,
+            // Before generating new test files, remove any previously-created files.
+            clean: {
+                tests: ['tmp']
             },
-            ndest: {
-                src: [
-                    'src/Utils.js',
-                    'src/QrCode/GeneratorPolynominal.js',
-                    'src/QrCode/Config.js',
-                    'src/QrCode/DataAnalyzer.js',
-                    'src/QrCode/DataEncoder.js',
-                    'src/QrCode/ErrorCorrection.js',
-                    'src/QrCode/Matrix.js',
-                    'src/QrCode/Tiler.js',
-                    'src/QrCode/Mask.js',
-                    'src/QrCode/Evaluation.js',
-                    'src/QrCode/QrCode.js',
-                    'src/nodejs-footer.js'
-                ],
-                dest: 'tasks/qrcode.js'
-            }
-        },
-        uglify: {
-            options: {
-                banner: '/*! <%= pkg.name %>: <%= pkg.description %> <%= grunt.template.today("yyyy-mm-dd hh:MM") %> */\n'
+            concat: {
+                dest: {
+                    src: [
+                        'src/Utils.js',
+                        'src/QrCode/GeneratorPolynominal.js',
+                        'src/QrCode/Config.js',
+                        'src/QrCode/DataAnalyzer.js',
+                        'src/QrCode/DataEncoder.js',
+                        'src/QrCode/ErrorCorrection.js',
+                        'src/QrCode/Matrix.js',
+                        'src/QrCode/Tiler.js',
+                        'src/QrCode/Mask.js',
+                        'src/QrCode/Evaluation.js',
+                        'src/QrCode/QrCode.js'
+                    ],
+                    dest: 'dist/qrcode.js'
+                },
+                ndest: {
+                    src: [
+                        'src/Utils.js',
+                        'src/QrCode/GeneratorPolynominal.js',
+                        'src/QrCode/Config.js',
+                        'src/QrCode/DataAnalyzer.js',
+                        'src/QrCode/DataEncoder.js',
+                        'src/QrCode/ErrorCorrection.js',
+                        'src/QrCode/Matrix.js',
+                        'src/QrCode/Tiler.js',
+                        'src/QrCode/Mask.js',
+                        'src/QrCode/Evaluation.js',
+                        'src/QrCode/QrCode.js',
+                        'src/nodejs-footer.js'
+                    ],
+                    dest: 'tasks/qrcode.js'
+                }
             },
-            build: {
-                src: 'dist/qrcode.js',
-                dest: 'dist/qrcode.min.js'
-            }
-        },
-        compare_size: {
-            files: [
-                'dist/qrcode.js',
-                'dist/qrcode.min.js'
-            ]
-        },
-        jshint: {
-            options: {
-                jshintrc: '.jshintrc'
+            uglify: {
+                options: {
+                    banner: '/*! <%= pkg.name %>: <%= pkg.description %> <%= grunt.template.today("yyyy-mm-dd hh:MM") %> */\n'
+                },
+                build: {
+                    src: 'dist/qrcode.js',
+                    dest: 'dist/qrcode.min.js'
+                }
             },
-            files: [
-                'Gruntfile.js',
-                'src/QrCode/*.js',
-                'src/*.js',
-                '!dist/*.min.js'
-            ]
-        },
-        qunit: {
-            tests: [
-                "qunit/*.html"
-            ]
-        },
-        nodeunit: {
-            tests: {
-                src: [
-                    'nodeunit/tests/*.js'
+            compare_size: {
+                files: [
+                    'dist/qrcode.js',
+                    'dist/qrcode.min.js'
                 ]
-            }
-        },
-        shell: {
-            nutap: {
-                command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/qrcode.js',
+            },
+            jshint: {
                 options: {
-                    stdout: true,
-                    stderr: true,
-                    failOnError: false,
-                    warnOnError: true
+                    jshintrc: '.jshintrc'
+                },
+                files: [
+                    'Gruntfile.js',
+                    'src/QrCode/*.js',
+                    'src/*.js',
+                    '!dist/*.min.js'
+                ]
+            },
+            qunit: {
+                tests: [
+                    "qunit/*.html"
+                ]
+            },
+            nodeunit: {
+                basic: {
+                    src: [
+                        'nodeunit/tests/basic.js'
+                    ]
+                },
+                myway: {
+                    src: [
+                        'nodeunit/tests/myway.js'
+                    ]
+                },
+                max: {
+                    src: [
+                        'nodeunit/tests/max.js'
+                    ]
                 }
-            }
-        },
-        karma: {
-            unit: {
-                configFile: 'karma.conf.js'
-            }
-        },
-        watch: {
-            scripts: {
-                files: ['**/*.js'],
-                tasks: ['jshint'],
-                options: {
-                    spawn: false
+            },
+            shell: {
+                nutap_max: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/max.js',
+                    options: {
+                        stdout: true,
+                        stderr: true,
+                        failOnError: false,
+                        warnOnError: true
+                    }
                 }
-            }
-        },
-        jsdoc: {
-            dist: {
-                src: ['src/*.js', 'README.md'],
-                dest: 'doc'
+            },
+            karma: {
+                unit: {
+                    configFile: 'karma.conf.js'
+                }
+            },
+            watch: {
+                scripts: {
+                    files: ['**/*.js'],
+                    tasks: ['jshint'],
+                    options: {
+                        spawn: false
+                    }
+                }
+            },
+            jsdoc: {
+                dist: {
+                    src: ['src/*.js', 'README.md'],
+                    dest: 'doc'
+                }
             }
         }
-    });
+    )
+    ;
 
-    // Load grunt plugins.
+// Load grunt plugins.
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-compare-size');
@@ -129,16 +141,17 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-shell');
 
-    // Build task.
+// Build task.
     grunt.registerTask('build', [ 'concat', 'uglify', 'compare_size' ]);
 
-    // Test tasks.
-    grunt.registerTask('utest', [ 'clean', 'nodeunit' ]);
+// Test tasks.
+    grunt.registerTask('utest', [ 'build', 'clean', 'nodeunit' ]);
     grunt.registerTask('test', [ 'jshint', 'qunit' ]);
 
-    // Default task.
+// Default task.
     grunt.registerTask('default', [ 'build', 'test' ]);
 
-    // All the tasks.
+// All the tasks.
     grunt.registerTask('all', [ 'default', 'utest' ]);
-};
+}
+;

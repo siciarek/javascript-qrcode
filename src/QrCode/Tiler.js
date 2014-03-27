@@ -8,7 +8,6 @@ var Tiler = function (matrix) {
         y: this.matrix.getSize() - 1
     };
 
-    this.mask = this.matrix.getMask();
     this.data = this.matrix.getData();
 };
 
@@ -67,7 +66,7 @@ Tiler.prototype.setArea = function (datastr) {
 
             while (bits.length > 0) {
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -85,7 +84,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -104,7 +103,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][1][0];
                 this.cursor.y += offsets[offix][1][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -123,7 +122,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -154,7 +153,7 @@ Tiler.prototype.setArea = function (datastr) {
 
             while (bits.length > 0) {
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -172,7 +171,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -191,7 +190,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][1][0];
                 this.cursor.y += offsets[offix][1][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -210,7 +209,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -248,7 +247,7 @@ Tiler.prototype.setArea = function (datastr) {
 
             while (bits.length > 0) {
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -266,10 +265,9 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
-
 
                 if (this.data[this.cursor.y][this.cursor.x] === this.matrix.DATA_UNDEFINED_MODULE) {
                     bit = bits.shift();
@@ -285,7 +283,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][1][0];
                 this.cursor.y += offsets[offix][1][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -304,7 +302,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -335,7 +333,7 @@ Tiler.prototype.setArea = function (datastr) {
 
             while (bits.length > 0) {
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -353,7 +351,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -372,7 +370,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][1][0];
                 this.cursor.y += offsets[offix][1][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 
@@ -391,7 +389,7 @@ Tiler.prototype.setArea = function (datastr) {
                 this.cursor.x += offsets[offix][0][0];
                 this.cursor.y += offsets[offix][0][1];
 
-                if (typeof this.mask[this.cursor.y] === 'undefined' || this.mask[this.cursor.y][this.cursor.x] === 'undefined') {
+                if (typeof this.data[this.cursor.y] === 'undefined' || this.data[this.cursor.y][this.cursor.x] === 'undefined') {
                     break;
                 }
 

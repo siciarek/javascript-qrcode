@@ -5,7 +5,6 @@ module.exports = {
         var tmpdir = 'tmp';
         var dataFile = __dirname + '/../data/data.json';
         var modulesize = 4; // size (px) of data module on the code picture
-        var ecstrategy = ['L'];
 
         var mkdirp = require('mkdirp');
         var fs = require('fs');
@@ -29,8 +28,9 @@ module.exports = {
 // WRITE:
 
             for (var i = 0; i < qrcodeDataProvider.length; i += 1) {
+                var ecstrategy = ['L'];
 
-                var qrcode = require('../../tasks/qrcode').QrCode(qrcodeDataProvider[i].data, ['L']);
+                var qrcode = require('../../tasks/qrcode').QrCode(qrcodeDataProvider[i].data, ecstrategy);
                 var code = qrcode.getData();
                 actual = [qrcode.getSize(), qrcode.getSize()];
                 expected = qrcodeDataProvider[i].size;
