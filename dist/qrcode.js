@@ -1671,10 +1671,12 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
 
     'use strict';
 
+    data = data || '';
+
     var defaultEcLevels = ['H', 'Q', 'M', 'L'];
 
-    if(typeof data === 'undefined') {
-        throw 'No data were given.';
+    if(data.length === 0) {
+        throw 'Data should contain at least one character.';
     }
 
     eclevels = eclevels || defaultEcLevels;
@@ -1697,17 +1699,17 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
         }
     }
 
-    var inRange = false;
-    var len = data.length;
+    var outOfRange = true;
 
     for(var i = 0; i < eclevels.length; i += 1) {
         var range = this.config.getCapacityRange(result.mode, eclevels[i]);
-        if(len >= range.min && len <= range.max) {
-            inRange = true;
+        if(data.length >= range.min && data.length <= range.max) {
+            outOfRange = false;
+            break;
         }
     }
 
-    if(inRange === false) {
+    if(outOfRange === true) {
         throw 'Data size is out of possible range.';
     }
 
@@ -1830,7 +1832,6 @@ DataEncoder.prototype.encodeBinary = function (data) {
 
 DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
     'use strict';
-
 
     var padBytes = ['11101100', '00010001'];
 
@@ -3346,7 +3347,7 @@ Evaluation.prototype.rules = {
 var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {
     'use strict';
 
-    data = data || 'QRCODE';
+    data = data || '';
     ecstrategy = ecstrategy || ['M'];
     maskPattern = maskPattern || null;
     version = version || null;

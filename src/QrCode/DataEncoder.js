@@ -89,7 +89,6 @@ DataEncoder.prototype.encodeBinary = function (data) {
 DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
     'use strict';
 
-
     var padBytes = ['11101100', '00010001'];
 
     // Set mode indicator and character count indicator:

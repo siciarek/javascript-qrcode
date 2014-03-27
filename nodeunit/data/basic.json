@@ -1,0 +1,52 @@
+[
+    {
+        "name": "Single digit",
+        "mode": "numeric",
+        "data": "0"
+    },
+    {
+        "name": "Single character - alphanumeric",
+        "mode": "alphanumeric",
+        "data": "A"
+    },
+    {
+        "name": "Single character - binary",
+        "mode": "binary",
+        "data": "a"
+    },
+    {
+        "name": "Phone number (Ghostbusters) - numeric",
+        "mode": "numeric",
+        "data": "5552368"
+    },
+    {
+        "name": "Phone number (Ghostbusters) - alphanumeric",
+        "mode": "alphanumeric",
+        "data": "555-2368"
+    },
+    {
+        "name": "Simple URL - alphanumeric",
+        "mode": "alphanumeric",
+        "data": "HTTP://WWW.QRCODE.COM"
+    },
+    {
+        "name": "Simple URL",
+        "mode": "binary",
+        "data": "http://www.qrcode.com"
+    },
+    {
+        "name": "YouTube URL",
+        "mode": "binary",
+        "data": "https://www.youtube.com/watch?v=m9We2XsVZfc"
+    },
+    {
+        "name": "URL with multiple parameters",
+        "mode": "binary",
+        "data": "http://example.com/shop/index.php?product_id=32&highlight=green+dress&cat_id=1&sessionid=123&affid=431"
+    },
+    {
+        "name": "E-mail address",
+        "mode": "binary",
+        "data": "siciarek@gmail.com"
+    }
+]

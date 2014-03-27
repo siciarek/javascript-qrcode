@@ -10,7 +10,7 @@
 var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {
     'use strict';
 
-    data = data || 'QRCODE';
+    data = data || '';
     ecstrategy = ecstrategy || ['M'];
     maskPattern = maskPattern || null;
     version = version || null;

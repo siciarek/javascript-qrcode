@@ -84,6 +84,11 @@ module.exports = function (grunt) {
                         'nodeunit/tests/basic.js'
                     ]
                 },
+                sizes: {
+                    src: [
+                        'nodeunit/tests/sizes.js'
+                    ]
+                },
                 myway: {
                     src: [
                         'nodeunit/tests/myway.js'
@@ -96,6 +101,33 @@ module.exports = function (grunt) {
                 }
             },
             shell: {
+                nutap_basic: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/basic.js',
+                    options: {
+                        stdout: true,
+                        stderr: true,
+                        failOnError: false,
+                        warnOnError: true
+                    }
+                },
+                nutap_sizes: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/sizes.js',
+                    options: {
+                        stdout: true,
+                        stderr: true,
+                        failOnError: false,
+                        warnOnError: true
+                    }
+                },
+                nutap_myway: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/myway.js',
+                    options: {
+                        stdout: true,
+                        stderr: true,
+                        failOnError: false,
+                        warnOnError: true
+                    }
+                },
                 nutap_max: {
                     command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/max.js',
                     options: {

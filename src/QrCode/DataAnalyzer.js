@@ -49,10 +49,12 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
 
     'use strict';
 
+    data = data || '';
+
     var defaultEcLevels = ['H', 'Q', 'M', 'L'];
 
-    if(typeof data === 'undefined') {
-        throw 'No data were given.';
+    if(data.length === 0) {
+        throw 'Data should contain at least one character.';
     }
 
     eclevels = eclevels || defaultEcLevels;
@@ -75,17 +77,17 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
         }
     }
 
-    var inRange = false;
-    var len = data.length;
+    var outOfRange = true;
 
     for(var i = 0; i < eclevels.length; i += 1) {
         var range = this.config.getCapacityRange(result.mode, eclevels[i]);
-        if(len >= range.min && len <= range.max) {
-            inRange = true;
+        if(data.length >= range.min && data.length <= range.max) {
+            outOfRange = false;
+            break;
         }
     }
 
-    if(inRange === false) {
+    if(outOfRange === true) {
         throw 'Data size is out of possible range.';
     }
 

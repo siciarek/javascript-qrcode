@@ -3,7 +3,7 @@ module.exports = {
     test: function (t) {
 
         var tmpdir = 'tmp';
-        var dataFile = __dirname + '/../data/basic.json';
+        var dataFile = __dirname + '/../data/sizes.json';
         var modulesize = 4; // size (px) of data module on the code picture
 
         var mkdirp = require('mkdirp');
@@ -28,15 +28,13 @@ module.exports = {
 // WRITE:
 
             for (var i = 0; i < qrcodeDataProvider.length; i += 1) {
+                var ecstrategy = ['L'];
 
-                var eclevel = 'M';
-                var expected = qrcodeDataProvider[i];
-
-                var qrcode = require('../../tasks/qrcode').QrCode(expected.data, [eclevel]);
+                var qrcode = require('../../tasks/qrcode').QrCode(qrcodeDataProvider[i].data, ecstrategy);
                 var code = qrcode.getData();
-                var info = qrcode.getInfo();
-
-                t.deepEqual(info.mode, expected.mode, [expected.name, info.data, info.mode, expected.mode].toString());
+                actual = [qrcode.getSize(), qrcode.getSize()];
+                expected = qrcodeDataProvider[i].size;
+                t.deepEqual(actual, expected, ['exp: "', expected, '", act: "', actual, '"'].join(''));
 
                 var magicNumber = 'P1';
                 var width = code.length * modulesize;
@@ -79,11 +77,12 @@ module.exports = {
                 for (var i = 0; i < this.expected.length; i++) {
                     var expected = this.expected[i];
                     var actual = ret[i];
-                    t.deepEqual(actual.data, expected.data, expected.name);
+                    t.deepEqual(actual, expected, 'file: "' + tmpdir + '/' + i + '.pbm');
                 }
 
                 t.done();
             });
+
         });
     }
 };
