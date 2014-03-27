@@ -4,7 +4,7 @@ module.exports = {
 
         var tmpdir = 'tmp';
         var dataFile = __dirname + '/../data/basic.json';
-        var modulesize = 4; // size (px) of data module on the code picture
+        var modulesize = 2; // size (px) of data module on the code picture
 
         var mkdirp = require('mkdirp');
         var fs = require('fs');

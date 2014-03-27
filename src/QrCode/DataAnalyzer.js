@@ -88,7 +88,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     }
 
     if(outOfRange === true) {
-        throw 'Data size is out of possible range.';
+        throw 'Data size is out of supported range.';
     }
 
     for (var version in this.config.characterCapacities) {

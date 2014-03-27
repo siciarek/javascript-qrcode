@@ -1710,7 +1710,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     }
 
     if(outOfRange === true) {
-        throw 'Data size is out of possible range.';
+        throw 'Data size is out of supported range.';
     }
 
     for (var version in this.config.characterCapacities) {
@@ -1830,7 +1830,7 @@ DataEncoder.prototype.encodeBinary = function (data) {
     return output;
 };
 
-DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
+DataEncoder.prototype.encodeData = function (data, mode, version, ecLevel) {
     'use strict';
 
     var padBytes = ['11101100', '00010001'];
@@ -1859,7 +1859,6 @@ DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
     else {
         throw 'Mode ' + mode + ' is not supported.';
     }
-
 
     var bitstring = bitdata.join('');
 
@@ -1976,7 +1975,6 @@ DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
     // Interleave the Error Correction Codewords
     for (n = 0; n < eccblocks[0].length; n += 1) {
         for (b = 0; b < eccblocks.length; b += 1) {
-            var ecb = eccblocks[b];
             finalEcCodewords.push(eccblocks[b][n]);
         }
     }
@@ -2193,7 +2191,7 @@ Matrix.prototype.setPositionDetectionPatterns = function () {
 Matrix.prototype.setSeparators = function () {
     'use strict';
 
-    var i = 0;
+    var i;
     var x = 0, y = 0;
     var offset = this.getSize() - 7;
     var aoffset = 0;
@@ -2306,8 +2304,7 @@ Matrix.prototype.setFormatInformationArea = function (formatInformationString, d
     ];
 
     var val = 0;
-    var x = 0;
-    var y = 0;
+    var x, y;
 
     while (formatInformation.length > 0) {
         val = formatInformation.shift();
@@ -2520,8 +2517,7 @@ Matrix.prototype.setAlignmentPattern = function (cx, cy) {
 Matrix.prototype.setPositionDetectionPattern = function (top, left) {
     'use strict';
 
-    var x = 0;
-    var y = 0;
+    var x, y;
 
     // TOP/BOTTOM:
     for (x = 0; x < 7; x += 1) {
@@ -2995,10 +2991,14 @@ Evaluation.prototype.rules = {
 /**
  * Quick Response Model 2 Code generator
  *
- * @param {string} data raw data, default 'QRCODE'
+ * @param {string} data raw data
  * @param {array} ecstrategy error correction strategy, default ['M']
  * @param {number|null} maskPattern force mask pattern, default null
  * @param {number} version version number
+ * @param {boolean} dataOnly if no mask is to be applied
+ *
+ * @throws {string} Out of range Exception
+ *
  * @constructor
  */
 var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {

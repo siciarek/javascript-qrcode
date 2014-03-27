@@ -66,73 +66,73 @@ var exceptionsDataProvider = [
     {
         data: getOutOfRangeData('numeric', 'L'),
         eclevel: 'L',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - numeric'
     },
     {
         data: getOutOfRangeData('alphanumeric', 'L'),
         eclevel: 'L',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - alphanumeric'
     },
     {
         data: getOutOfRangeData('binary', 'L'),
         eclevel: 'L',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - binary'
     },
     {
         data: getOutOfRangeData('numeric', 'M'),
         eclevel: 'M',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - numeric'
     },
     {
         data: getOutOfRangeData('alphanumeric', 'M'),
         eclevel: 'M',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - alphanumeric'
     },
     {
         data: getOutOfRangeData('binary', 'M'),
         eclevel: 'M',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - binary'
     },
     {
         data: getOutOfRangeData('numeric', 'Q'),
         eclevel: 'Q',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - numeric'
     },
     {
         data: getOutOfRangeData('alphanumeric', 'Q'),
         eclevel: 'Q',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - alphanumeric'
     },
     {
         data: getOutOfRangeData('binary', 'Q'),
         eclevel: 'Q',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - binary'
     },
     {
         data: getOutOfRangeData('numeric', 'H'),
         eclevel: 'H',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - numeric'
     },
     {
         data: getOutOfRangeData('alphanumeric', 'H'),
         eclevel: 'H',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - alphanumeric'
     },
     {
         data: getOutOfRangeData('binary', 'H'),
         eclevel: 'H',
-        exception: 'Data size is out of possible range.',
+        exception: 'Data size is out of supported range.',
         message: 'Out of range - binary'
     }
 ];
