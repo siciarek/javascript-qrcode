@@ -1,10 +1,14 @@
 /**
  * Quick Response Model 2 Code generator
  *
- * @param {string} data raw data, default 'QRCODE'
+ * @param {string} data raw data
  * @param {array} ecstrategy error correction strategy, default ['M']
  * @param {number|null} maskPattern force mask pattern, default null
  * @param {number} version version number
+ * @param {boolean} dataOnly if no mask is to be applied
+ *
+ * @throws {string} Out of range Exception
+ *
  * @constructor
  */
 var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {

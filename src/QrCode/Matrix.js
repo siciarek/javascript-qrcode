@@ -67,7 +67,7 @@ Matrix.prototype.setPositionDetectionPatterns = function () {
 Matrix.prototype.setSeparators = function () {
     'use strict';
 
-    var i = 0;
+    var i;
     var x = 0, y = 0;
     var offset = this.getSize() - 7;
     var aoffset = 0;
@@ -180,8 +180,7 @@ Matrix.prototype.setFormatInformationArea = function (formatInformationString, d
     ];
 
     var val = 0;
-    var x = 0;
-    var y = 0;
+    var x, y;
 
     while (formatInformation.length > 0) {
         val = formatInformation.shift();
@@ -394,8 +393,7 @@ Matrix.prototype.setAlignmentPattern = function (cx, cy) {
 Matrix.prototype.setPositionDetectionPattern = function (top, left) {
     'use strict';
 
-    var x = 0;
-    var y = 0;
+    var x, y;
 
     // TOP/BOTTOM:
     for (x = 0; x < 7; x += 1) {

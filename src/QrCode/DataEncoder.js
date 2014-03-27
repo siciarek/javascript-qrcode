@@ -86,7 +86,7 @@ DataEncoder.prototype.encodeBinary = function (data) {
     return output;
 };
 
-DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
+DataEncoder.prototype.encodeData = function (data, mode, version, ecLevel) {
     'use strict';
 
     var padBytes = ['11101100', '00010001'];
@@ -115,7 +115,6 @@ DataEncoder.prototype.encodeData = function(data, mode, version, ecLevel) {
     else {
         throw 'Mode ' + mode + ' is not supported.';
     }
-
 
     var bitstring = bitdata.join('');
 
@@ -232,7 +231,6 @@ DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
     // Interleave the Error Correction Codewords
     for (n = 0; n < eccblocks[0].length; n += 1) {
         for (b = 0; b < eccblocks.length; b += 1) {
-            var ecb = eccblocks[b];
             finalEcCodewords.push(eccblocks[b][n]);
         }
     }
