@@ -30,24 +30,6 @@
             font-family: 'Roboto Slab', serif;
         }
 
-        .info div {
-            vertical-align: top;
-            display: inline-block;
-            width: 65%;
-        }
-
-        .info div.label {
-            color: #555555 !important;
-            font-size: 1em;
-            width: 130px;
-            text-align: right;
-            margin-right: 4px
-        }
-
-        .info div.label:after {
-            content: ':'
-        }
-
         #canvas {
             image-rendering: -moz-crisp-edges; /* FF 6.0+ */
             image-rendering: -webkit-optimize-contrast; /* Webkit */
@@ -83,6 +65,34 @@
 
         form.form-horizontal .input-group {
             margin-bottom: 8px;
+        }
+
+        .info.list-group {
+            box-shadow: none;
+        }
+
+        .info .list-group-item {
+            display: table-row;
+        }
+
+        .info div {
+            display: table-cell;
+            padding: 11px;
+        }
+
+        .info div.label {
+            color: #555555 !important;
+            font-size: 1em;
+            text-align: right;
+            margin-right: 4px
+        }
+
+        .info div.data {
+            white-space: pre-wrap;
+        }
+
+        .info div.label:after {
+            content: ':'
         }
 
     </style>
@@ -292,7 +302,7 @@
                     value = $('select[name="ec"]').find('option[value="' + value + '"]').text();
                 }
 
-                html += '<li class="list-group-item"><div class="label">' + field + '</div><div>' + value + '</div></li>';
+                html += '<li class="list-group-item"><div class="label">' + field + '</div><div class="' + key + '">' + value + '</div></li>';
             }
         }
         html += '</ul>';
