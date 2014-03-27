@@ -40,6 +40,11 @@
         "data": "https://www.youtube.com/watch?v=m9We2XsVZfc"
     },
     {
+        "name": "Wikipedia URL",
+        "mode": "binary",
+        "data": "http://en.m.wikipedia.org"
+    },
+    {
         "name": "URL with multiple parameters",
         "mode": "binary",
         "data": "http://example.com/shop/index.php?product_id=32&highlight=green+dress&cat_id=1&sessionid=123&affid=431"

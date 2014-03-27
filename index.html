@@ -77,7 +77,7 @@
 
         .info div {
             display: table-cell;
-            padding: 11px;
+            padding-bottom: 12px;
         }
 
         .info div.label {
@@ -194,11 +194,19 @@
                     </div>
 
                     <div class="input-group">
+                        <label class="input-group-addon" for="version">Mask Pattern</label>
+                        <select name="mask" id="mask" class="form-control">
+                            <option value="" selected="selected">Auto</option>
+                            <option value="-1">Raw Data</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
                         <label class="input-group-addon" for="size">Module Size</label>
                         <select name="size" id="size" class="form-control">
                             <option value="2">Small</option>
-                            <option value="4" selected="selected">Medium</option>
-                            <option value="6">Large</option>
+                            <option value="3" selected="selected">Medium</option>
+                            <option value="5">Large</option>
                         </select>
                     </div>
 
@@ -241,14 +249,12 @@
 
 <script>
 
-    var modulesize = 4;
+    var modulesize = 3;
     var quietZoneSize = 4;
     var maskPattern = null;
     var version = null;
     var data = 'QR Code Model 2';
     var ecstrategy = ['M'];
-
-    data = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in lorem mollis, mattis magna quis, mollis orci. Sed non laoreet mi. Nunc dictum dui sed.';
 
     /**
      * HTTP HttpRequest support
@@ -280,8 +286,13 @@
 
     function setInfo(info) {
 
+        var size = 4 * (info.version - 1) + 21;
+
+        info.size = size + ' &times; ' + size;
+
         var fields = {
             version: 'Version',
+            size: 'Size',
             mode: 'Mode',
             eclevel: 'Error Correction',
             pattern: 'Mask Pattern',
@@ -369,13 +380,20 @@
         modulesize = !isNaN(temp) && temp > 0 ? temp : modulesize;
     }
 
-    function run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize) {
-        var qrcode = new QrCode(data, ecstrategy, maskPattern, version);
-        draw(qrcode, modulesize, quietZoneSize);
-        setInfo(qrcode.getInfo());
+    function run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize, dataOnly) {
+        dataOnly = dataOnly || false;
+
+        try {
+            var qrcode = new QrCode(data, ecstrategy, maskPattern, version, dataOnly);
+            draw(qrcode, modulesize, quietZoneSize);
+            setInfo(qrcode.getInfo());
+        }
+        catch(e) {
+            alert(e);
+        }
     }
 
-    run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize);
+    run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize, false);
 
 </script>
 
@@ -390,11 +408,16 @@
 
     $(document).ready(function () {
 
+        var o;
+
         $('.qrcode-form textarea').val(data);
 
-        for (var o = 1; o <= 40; o++) {
-            var option = '<option value="' + o + '">' + o + '</option>';
-            $('.qrcode-form select[name="version"]').append(option);
+        for (o = 1; o <= 40; o++) {
+            $('.qrcode-form select[name="version"]').append('<option value="' + o + '">' + o + '</option>');
+        }
+
+        for (o = 0; o <= 8; o++) {
+            $('.qrcode-form select[name="mask"]').append('<option value="' + o + '">' + o + '</option>');
         }
 
         $('.qrcode-form')
@@ -402,10 +425,10 @@
                     var self = $(this);
 
                     if (self.attr('name') === 'version') {
-                        if (self.val() > 27) {
+                        if (self.val() > 35) {
                             $('#size').val(2);
                         } else {
-                            $('#size').val(4);
+                            $('#size').val(3);
                         }
                     }
 
@@ -418,6 +441,21 @@
         $('#generate-qrcode').click(function () {
             var quietZoneSize = 4;
             var maskPattern = null;
+            var dataOnly = false;
+
+            var mask = $('.form-horizontal *[name="mask"]').val();
+
+            if(mask.trim().length === 0 || isNaN(mask)) {
+                maskPattern = null;
+            }
+            else if(mask >= 0 && mask < 8) {
+                maskPattern = parseInt(mask);
+            }
+            else if(mask < 0) {
+                dataOnly = true;
+            }
+
+
             var data = $('.form-horizontal *[name="data"]').val();
             var ec = $('.form-horizontal *[name="ec"]').val();
             var version = $('.form-horizontal *[name="version"]').val();
@@ -432,7 +470,7 @@
 
             clearCanvas(context, canvas);
 
-            run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize);
+            run(data, ecstrategy, maskPattern, version, modulesize, quietZoneSize, dataOnly);
         });
     });
 </script>
