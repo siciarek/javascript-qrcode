@@ -134,6 +134,12 @@
                             Tests
                         </a>
                     </li>
+                    <li>
+                        <a target="_blank" title="Tests" href="https://github.com/siciarek/javascript-qrcode">
+                            <i class="icon-github icon-large"></i>
+                            Source on GitHub
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -152,7 +158,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <form class="form-horizontal qrcode-form">
 
                     <div class="input-group">
@@ -163,10 +169,10 @@
                     <div class="input-group">
                         <label class="input-group-addon" for="ec">Error Correction</label>
                         <select name="ec" id="ec" class="form-control">
-                            <option value="L">Level L (Low) ~7% of codewords can be restored.</option>
-                            <option value="M" selected="selected">Level M (Medium) ~15% of codewords can be restored.</option>
-                            <option value="Q">Level Q (Quartile) ~25% of codewords can be restored.</option>
-                            <option value="H">Level H (High) ~30% of codewords can be restored.</option>
+                            <option title="Level L (Low) ~7% of codewords can be restored." value="L">Level L (Low) ~7% of codewords can be restored.</option>
+                            <option title="Level M (Medium) ~15% of codewords can be restored." value="M" selected="selected">Level M (Medium) ~15% of codewords can be restored.</option>
+                            <option title="Level Q (Quartile) ~25% of codewords can be restored." value="Q">Level Q (Quartile) ~25% of codewords can be restored.</option>
+                            <option title="Level H (High) ~30% of codewords can be restored." value="H">Level H (High) ~30% of codewords can be restored.</option>
                         </select>
                     </div>
 
@@ -198,7 +204,7 @@
                     <br/>
                 </form>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-6">
 
                 <div class="canvas center">
                     <canvas id="canvas"></canvas>
@@ -221,17 +227,7 @@
 <script src="//cdn.jsdelivr.net/jquery.cookie/1.3.1/jquery.cookie.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
-<script src="src/Utils.js"></script>
-<script src="src/QrCode/Config.js"></script>
-<script src="src/QrCode/GeneratorPolynominal.js"></script>
-<script src="src/QrCode/DataAnalyzer.js"></script>
-<script src="src/QrCode/DataEncoder.js"></script>
-<script src="src/QrCode/ErrorCorrection.js"></script>
-<script src="src/QrCode/Matrix.js"></script>
-<script src="src/QrCode/Tiler.js"></script>
-<script src="src/QrCode/Mask.js"></script>
-<script src="src/QrCode/Evaluation.js"></script>
-<script src="src/QrCode/QrCode.js"></script>
+<script src="dist/qrcode.min.js"></script>
 
 <script>
 
@@ -396,7 +392,7 @@
                     var self = $(this);
 
                     if (self.attr('name') === 'version') {
-                        if (self.val() > 32) {
+                        if (self.val() > 27) {
                             $('#size').val(2);
                         } else {
                             $('#size').val(4);
