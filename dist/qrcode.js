@@ -21,7 +21,7 @@ var GeneratorPolynominal = function () {
 
 GeneratorPolynominal.prototype.constructor = GeneratorPolynominal;
 
-GeneratorPolynominal.prototype.createLogAndAntilog = function () {
+GeneratorPolynominal.prototype.createLogAndAntilog = function (exp) {
     'use strict';
 
 
@@ -288,11 +288,14 @@ Config.prototype.getCharacterCountIndicator = function(characterCount, mode, ver
     return characterCountIndicator;
 };
 Config.prototype.getCapacityRange = function(mode, eclevel) {
+    'use strict';
+
     var maxversion = Object.keys(this.characterCapacities).pop();
+
     return {
         min: 1,
         max: this.characterCapacities[maxversion][eclevel][mode]
-    }
+    };
 };
 Config.prototype.correctionLevels = {
     L: 1,
@@ -1699,7 +1702,6 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
 
     for(var i = 0; i < eclevels.length; i += 1) {
         var range = this.config.getCapacityRange(result.mode, eclevels[i]);
-        console.log(range);
         if(len >= range.min && len <= range.max) {
             inRange = true;
         }
@@ -1973,6 +1975,7 @@ DataEncoder.prototype.encode = function (data, mode, version, ecLevel) {
     // Interleave the Error Correction Codewords
     for (n = 0; n < eccblocks[0].length; n += 1) {
         for (b = 0; b < eccblocks.length; b += 1) {
+            var ecb = eccblocks[b];
             finalEcCodewords.push(eccblocks[b][n]);
         }
     }
@@ -2189,7 +2192,8 @@ Matrix.prototype.setPositionDetectionPatterns = function () {
 Matrix.prototype.setSeparators = function () {
     'use strict';
 
-    var i, x = 0, y = 0;
+    var i = 0;
+    var x = 0, y = 0;
     var offset = this.getSize() - 7;
     var aoffset = 0;
     var boffset = 7;
@@ -2300,7 +2304,9 @@ Matrix.prototype.setFormatInformationArea = function (formatInformationString, d
         []
     ];
 
-    var val, x, y;
+    var val = 0;
+    var x = 0;
+    var y = 0;
 
     while (formatInformation.length > 0) {
         val = formatInformation.shift();
@@ -2513,7 +2519,8 @@ Matrix.prototype.setAlignmentPattern = function (cx, cy) {
 Matrix.prototype.setPositionDetectionPattern = function (top, left) {
     'use strict';
 
-    var x, y;
+    var x = 0;
+    var y = 0;
 
     // TOP/BOTTOM:
     for (x = 0; x < 7; x += 1) {
@@ -3334,7 +3341,6 @@ Evaluation.prototype.rules = {
  * @param {array} ecstrategy error correction strategy, default ['M']
  * @param {number|null} maskPattern force mask pattern, default null
  * @param {number} version version number
- * @param {boolean} dataOnly flag to show data without mask applied
  * @constructor
  */
 var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {

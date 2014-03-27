@@ -202,7 +202,7 @@ Config.prototype.getFormatString = function (correctionLevel, maskPattern) {
     var mask = '101010000010010';
 
     var formatString = '';
-    var result = '';
+    var result;
 
     var cl = this.correctionLevels[correctionLevel].toString(2);
     while (cl.length < 2) {
@@ -288,11 +288,14 @@ Config.prototype.getCharacterCountIndicator = function(characterCount, mode, ver
     return characterCountIndicator;
 };
 Config.prototype.getCapacityRange = function(mode, eclevel) {
+    'use strict';
+
     var maxversion = Object.keys(this.characterCapacities).pop();
+
     return {
         min: 1,
         max: this.characterCapacities[maxversion][eclevel][mode]
-    }
+    };
 };
 Config.prototype.correctionLevels = {
     L: 1,
@@ -1699,7 +1702,6 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
 
     for(var i = 0; i < eclevels.length; i += 1) {
         var range = this.config.getCapacityRange(result.mode, eclevels[i]);
-        console.log(range);
         if(len >= range.min && len <= range.max) {
             inRange = true;
         }

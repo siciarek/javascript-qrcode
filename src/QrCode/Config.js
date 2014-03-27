@@ -150,11 +150,14 @@ Config.prototype.getCharacterCountIndicator = function(characterCount, mode, ver
     return characterCountIndicator;
 };
 Config.prototype.getCapacityRange = function(mode, eclevel) {
+    'use strict';
+
     var maxversion = Object.keys(this.characterCapacities).pop();
+
     return {
         min: 1,
         max: this.characterCapacities[maxversion][eclevel][mode]
-    }
+    };
 };
 Config.prototype.correctionLevels = {
     L: 1,

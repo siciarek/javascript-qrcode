@@ -73,7 +73,9 @@ module.exports = function (grunt) {
             },
             qunit: {
                 tests: [
-                    "qunit/*.html"
+                    "qunit/index.src.html",
+                    "qunit/index.html",
+                    "qunit/index.min.html"
                 ]
             },
             nodeunit: {
