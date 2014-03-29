@@ -135,6 +135,8 @@
                             <li class="divider"></li>
                             <li class="dropdown-header">QR Code Desktop Reader</li>
                             <li><a target="_blank" href="http://www.codetwo.pl/freeware/qr-code-desktop-reader/">CodeTwo QR Code Desktop Reader</a>
+                            <li class="dropdown-header">QR Code Commandline Decoder</li>
+                            <li><a target="_blank" href="http://zbar.sourceforge.net/">ZBar bar code reader</a>
                             </li>
                         </ul>
                     </li>
@@ -176,13 +178,23 @@
                         <textarea name="data" id="data" class="form-control" rows="5" placeholder="Insert textual data">QR Code Model 2</textarea>
                     </div>
 
+                    <span class="help-block data"></span>
+
                     <div class="input-group">
                         <label class="input-group-addon" for="ec">Error Correction</label>
                         <select name="ec" id="ec" class="form-control">
-                            <option title="Level L (Low) ~7% of codewords can be restored." value="L">Level L (Low) ~7% of codewords can be restored.</option>
-                            <option title="Level M (Medium) ~15% of codewords can be restored." value="M" selected="selected">Level M (Medium) ~15% of codewords can be restored.</option>
-                            <option title="Level Q (Quartile) ~25% of codewords can be restored." value="Q">Level Q (Quartile) ~25% of codewords can be restored.</option>
-                            <option title="Level H (High) ~30% of codewords can be restored." value="H">Level H (High) ~30% of codewords can be restored.</option>
+                            <option title="Level L (Low) ~7% of codewords can be restored." value="L">Level L (Low) ~7% of codewords can be
+                                restored.
+                            </option>
+                            <option title="Level M (Medium) ~15% of codewords can be restored." value="M" selected="selected">Level M (Medium) ~15% of
+                                codewords can be restored.
+                            </option>
+                            <option title="Level Q (Quartile) ~25% of codewords can be restored." value="Q">Level Q (Quartile) ~25% of codewords can
+                                be restored.
+                            </option>
+                            <option title="Level H (High) ~30% of codewords can be restored." value="H">Level H (High) ~30% of codewords can be
+                                restored.
+                            </option>
                         </select>
                     </div>
 
@@ -212,7 +224,7 @@
 
                     <br/>
 
-                    <a href="javascript:void(null)" id="generate-qrcode" class="btn btn-default btn-lg pull-right">
+                    <a href="javascript:void(null)" id="generate-qrcode" class="btn btn-default btn-lg pull-right  hidden">
                         <i class="icon-cog text-muted"></i>
                         Generate
                     </a>
@@ -388,8 +400,8 @@
             draw(qrcode, modulesize, quietZoneSize);
             setInfo(qrcode.getInfo());
         }
-        catch(e) {
-            alert(e);
+        catch (e) {
+            $('.qrcode-form .help-block.data').html(e);
         }
     }
 
@@ -435,6 +447,30 @@
                     $('#generate-qrcode').trigger('click');
                 })
                 .on('keyup', 'textarea', function () {
+
+                    var border = {
+                        ok: {
+                            'border-color': '#66AFE9',
+                            'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6)'
+                        },
+                        notok: {
+                            'border-color': '#FF7777',
+                            'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(233, 175, 102, 0.6)'
+                        }
+                    };
+
+                    var br = 'notok';
+
+                    if($(this).val().length > 0) {
+                        br = 'ok';
+                        $('.qrcode-form .help-block.data').html('');
+                    }
+                    else {
+                        $('.info .list-group-item div.data').html('<em class="text-muted">empty</em>');
+                    }
+
+                    $('.form-control:focus').css(border[br]);
+
                     $('#generate-qrcode').trigger('click');
                 });
 
@@ -445,16 +481,15 @@
 
             var mask = $('.form-horizontal *[name="mask"]').val();
 
-            if(mask.trim().length === 0 || isNaN(mask)) {
+            if (mask.trim().length === 0 || isNaN(mask)) {
                 maskPattern = null;
             }
-            else if(mask >= 0 && mask < 8) {
+            else if (mask >= 0 && mask < 8) {
                 maskPattern = parseInt(mask);
             }
-            else if(mask < 0) {
+            else if (mask < 0) {
                 dataOnly = true;
             }
-
 
             var data = $('.form-horizontal *[name="data"]').val();
             var ec = $('.form-horizontal *[name="ec"]').val();

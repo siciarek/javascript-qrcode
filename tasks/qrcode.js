@@ -3079,8 +3079,8 @@ QrCode.prototype.getSize = function () {
     return this.matrix.getSize();
 };
 
-module.exports.QrCode = function(data, ecstrategy) {
+module.exports.QrCode = function(data, ecstrategy, version) {
     'use strict';
 
-    return new QrCode(data, ecstrategy);
+    return new QrCode(data, ecstrategy, null, version);
 };

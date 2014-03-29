@@ -20,5 +20,3 @@ results
 npm-debug.log
 node_modules
 .sizecache.json
-
-/bin

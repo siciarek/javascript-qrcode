@@ -98,6 +98,11 @@ module.exports = function (grunt) {
                     src: [
                         'nodeunit/tests/max.js'
                     ]
+                },
+                versions: {
+                    src: [
+                        'nodeunit/tests/versions.js'
+                    ]
                 }
             },
             shell: {
@@ -130,6 +135,15 @@ module.exports = function (grunt) {
                 },
                 nutap_max: {
                     command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/max.js',
+                    options: {
+                        stdout: true,
+                        stderr: true,
+                        failOnError: false,
+                        warnOnError: true
+                    }
+                },
+                nutap_ver: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/versions.js',
                     options: {
                         stdout: true,
                         stderr: true,
@@ -181,6 +195,7 @@ module.exports = function (grunt) {
 // Test tasks.
     grunt.registerTask('nunit', [ 'build', 'clean', 'nodeunit' ]);
     grunt.registerTask('test', [ 'jshint', 'qunit' ]);
+    grunt.registerTask('ver', [ 'clean', 'shell:nutap_ver' ]);
 
 // Default task.
     grunt.registerTask('default', [ 'build', 'test' ]);
