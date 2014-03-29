@@ -12,6 +12,8 @@ lib-cov
 *.pid
 *.gz
 *.pbm
+*.svg
+*.pdf
 
 pids
 logs

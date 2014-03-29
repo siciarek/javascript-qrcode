@@ -1,3 +1,17 @@
 node_modules
 npm-debug.log
 tmp
+.*
+*.svg
+temp*
+src
+dist
+Gruntfile.js
+karma.conf.js
+qunit
+nodeunit
+.*
+*.json
+*.yml
+index.html
+
