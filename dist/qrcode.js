@@ -2598,8 +2598,6 @@ Tiler.prototype.constructor = Tiler;
 Tiler.prototype.setArea = function (datastr) {
     'use strict';
 
-    var data = datastr.split('').parseInt();
-
     var UP = 0;
     var DOWN = 1;
 
@@ -2620,6 +2618,8 @@ Tiler.prototype.setArea = function (datastr) {
     var y = this.matrix.getSize() - 1;
     var tempy = y;
 
+    var data = datastr.split('').parseInt();
+
     while (data.length > 0) {
 
         // Check if matrix bottom or top is reached:
@@ -2628,7 +2628,7 @@ Tiler.prototype.setArea = function (datastr) {
             x -= 2;
             y = tempy;
 
-            // Switch move direction when code boundary is reach
+            // Switch move direction when code boundary is reached:
             direction = direction === UP ? DOWN : UP;
 
             // Left timing pattern exception:

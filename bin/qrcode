@@ -77,7 +77,7 @@ program
     .option('-o, --output-file [file]', 'path to output file.', 'qrcode')
     .option('-e, --error-correction [L|M|Q|H]', 'error correction level.', 'L')
     .option('-n, --version-number [1-40]', 'QR Code version number.', null)
-    .option('-s, --module-size [size]', 'single module size in pixels.', 2)
+    .option('-s, --module-size [size]', 'single module size in pixels.', 3)
     .option('-z, --quiet-zone-size [size]', 'quiet zone (border) size in modules.', 4)
     .option('-f, --format [format]', 'image file format (svg, pbm).', 'svg')
     .parse(process.argv);
@@ -99,7 +99,7 @@ if(data === null) {
     program.help();
 }
 else {
-    var qrcode = require('../tasks/qrcode').QrCode(data, ecstrategy, parseInt(program.versionNumber));
+    var qrcode = require('../lib/qrcode').QrCode(data, ecstrategy, parseInt(program.versionNumber));
     var info = qrcode.getInfo();
 
     var content = getContent(program.format, qrcode.getData(), parseInt(program.moduleSize), parseInt(program.quietZoneSize));

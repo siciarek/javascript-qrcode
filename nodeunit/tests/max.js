@@ -31,7 +31,7 @@ module.exports = {
 
                 var eclevel = qrcodeDataProvider[i].eclevel;
 
-                var qrcode = require('../../tasks/qrcode').QrCode(qrcodeDataProvider[i].data, [eclevel]);
+                var qrcode = require('../../lib/qrcode').QrCode(qrcodeDataProvider[i].data, [eclevel]);
                 var info = qrcode.getInfo();
                 delete info.data;
 
