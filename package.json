@@ -16,7 +16,7 @@
     "bin": {
         "qrcode": "./bin/qrcode"
     },
-    "main": "lib/qrcode.js",
+    "main": "./lib/qrcode.js",
     "keywords": [
         "qrcode",
         "javascript"
