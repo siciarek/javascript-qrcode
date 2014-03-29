@@ -435,6 +435,12 @@ Matrix.prototype.setPositionDetectionPattern = function (top, left) {
     }
 };
 
+Matrix.prototype.isModuleUndefined = function (x, y, data) {
+    'use strict';
+    data = data || this.data;
+    return data[y][x] === this.DATA_UNDEFINED_MODULE;
+};
+
 Matrix.prototype.setModule = function (x, y, value, maskValue, data) {
     'use strict';
 

@@ -3,8 +3,6 @@ $versions = range(1, $argv[1]);
 $eclevels = ['L', 'M', 'Q', 'H'];
 $chars = ['1', 'A', 'x'];
 
-$cmdfmt = 'node bin/qrcode.js -n %d -e %s -d %s -o %s';
-
 $d = 'tmp';
 
 if (!file_exists($d)) {
@@ -22,11 +20,11 @@ $output = '';
 foreach ($versions as $v) {
     foreach ($eclevels as $e) {
         foreach ($chars as $c) {
-            $file = sprintf($d . '/%d-%s-%s.pbm', $v, $e, $c);
-            $cmd = sprintf($cmdfmt, $v, $e, $c, $file);
+            $file = sprintf($d . '/%d-%s-%s', $v, $e, $c);
+            $cmd = sprintf('node bin/qrcode.js -n %d -e %s -d %s -o %s', $v, $e, $c, $file);
             `$cmd`;
 
-            $cmd = sprintf('zbarimg --set ean13.disable --quiet --raw %s', $file);
+            $cmd = sprintf('zbarimg --set ean13.disable --quiet --raw %s.svg', $file);
             $ret = `$cmd`;
             $ret = preg_replace("/\n$/", "", $ret);
 

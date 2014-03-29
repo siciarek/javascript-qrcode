@@ -68,6 +68,7 @@ module.exports = function (grunt) {
                     'Gruntfile.js',
                     'src/QrCode/*.js',
                     'src/*.js',
+                    'bin/*',
                     '!dist/*.min.js'
                 ]
             },

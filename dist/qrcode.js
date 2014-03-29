@@ -2559,6 +2559,12 @@ Matrix.prototype.setPositionDetectionPattern = function (top, left) {
     }
 };
 
+Matrix.prototype.isModuleUndefined = function (x, y, data) {
+    'use strict';
+    data = data || this.data;
+    return data[y][x] === this.DATA_UNDEFINED_MODULE;
+};
+
 Matrix.prototype.setModule = function (x, y, value, maskValue, data) {
     'use strict';
 
@@ -2618,33 +2624,24 @@ Tiler.prototype.setArea = function (datastr) {
 
         // Check if matrix bottom or top is reached:
         if (!(y >= 0 && y < this.matrix.getSize())) {
+
             x -= 2;
             y = tempy;
 
-            direction += 1;
-            direction %= 2;
+            // Switch move direction when code boundary is reach
+            direction = direction === UP ? DOWN : UP;
+
+            // Left timing pattern exception:
+            if (x === 6) {
+                x -= 1;
+            }
         }
 
         for (var i = 0; i < offsets[direction].length; i += 1) {
 
-            // Place data bit only module is undefined:
-            if (this.matrix.data[y][x] === this.matrix.DATA_UNDEFINED_MODULE) {
-
-                var bit = data.shift();
-
-                if (bit === 1) {
-                    this.matrix.setDarkModule(x, y, this.matrix.MASK_DATA);
-                }
-                else {
-                    this.matrix.setLightModule(x, y, this.matrix.MASK_DATA);
-                }
-
-                // Check if { x: 7, y: 9 } module is reached:
-                if (x === 7 && y === 9) {
-                    x -= 2;
-                    direction = DOWN;
-                    break;
-                }
+            // Place data bit only if matrix module is undefined:
+            if (this.matrix.isModuleUndefined(x, y)) {
+                this.matrix.setModule(x, y, data.shift(), this.matrix.MASK_DATA);
             }
 
             tempy = y;
