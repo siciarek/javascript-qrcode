@@ -2,6 +2,7 @@
 
 var program = require('commander');
 var fs = require('fs');
+var qc = require('../lib/qrcode');
 
 function getPbm(code, modulesize, quietZoneSize) {
     'use strict';
@@ -104,7 +105,7 @@ if(data === null) {
     program.help();
 }
 else {
-    var qrcode = require('../lib/qrcode').QrCode(data, ecstrategy, parseInt(program.versionNumber));
+    var qrcode = new qc.QrCode(data, ecstrategy, parseInt(program.versionNumber));
     var info = qrcode.getInfo();
 
     var content = getContent(program.format, qrcode.getData(), parseInt(program.moduleSize), parseInt(program.quietZoneSize));

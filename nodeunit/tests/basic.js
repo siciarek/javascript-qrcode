@@ -9,6 +9,7 @@ module.exports = {
         var mkdirp = require('mkdirp');
         var fs = require('fs');
         var sys = require('sys');
+        var qr = require('../../lib/qrcode');
 
         mkdirp(tmpdir, function (err) {
             if (err) {
@@ -32,7 +33,7 @@ module.exports = {
                 var eclevel = 'M';
                 var expected = qrcodeDataProvider[i];
 
-                var qrcode = require('../../lib/qrcode').QrCode(expected.data, [eclevel]);
+                var qrcode = new qr.QrCode(expected.data, [eclevel]);
                 var code = qrcode.getData();
                 var info = qrcode.getInfo();
 

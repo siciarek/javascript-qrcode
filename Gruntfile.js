@@ -2,6 +2,13 @@ module.exports = function (grunt) {
     'use strict';
 
     var pkg = grunt.file.readJSON('package.json');
+    var nutap_cmd = 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap';
+    var nutap_opts = {
+        stdout: true,
+        stderr: true,
+        failOnError: true,
+        warnOnError: true
+    };
 
     // Project configuration.
     grunt.initConfig({
@@ -14,33 +21,15 @@ module.exports = function (grunt) {
                 dest: {
                     src: [
                         'src/Utils.js',
-                        'src/QrCode/GeneratorPolynominal.js',
-                        'src/QrCode/Config.js',
-                        'src/QrCode/DataAnalyzer.js',
-                        'src/QrCode/DataEncoder.js',
-                        'src/QrCode/ErrorCorrection.js',
-                        'src/QrCode/Matrix.js',
-                        'src/QrCode/Tiler.js',
-                        'src/QrCode/Mask.js',
-                        'src/QrCode/Evaluation.js',
-                        'src/QrCode/QrCode.js'
+                        'src/QrCode/*.js'
                     ],
                     dest: 'dist/qrcode.js'
                 },
                 ndest: {
                     src: [
                         'src/Utils.js',
-                        'src/QrCode/GeneratorPolynominal.js',
-                        'src/QrCode/Config.js',
-                        'src/QrCode/DataAnalyzer.js',
-                        'src/QrCode/DataEncoder.js',
-                        'src/QrCode/ErrorCorrection.js',
-                        'src/QrCode/Matrix.js',
-                        'src/QrCode/Tiler.js',
-                        'src/QrCode/Mask.js',
-                        'src/QrCode/Evaluation.js',
-                        'src/QrCode/QrCode.js',
-                        'src/nodejs-footer.js'
+                        'src/QrCode/*.js',
+                        'src/module.exports.js'
                     ],
                     dest: 'lib/qrcode.js'
                 }
@@ -57,7 +46,8 @@ module.exports = function (grunt) {
             compare_size: {
                 files: [
                     'dist/qrcode.js',
-                    'dist/qrcode.min.js'
+                    'dist/qrcode.min.js',
+                    'lib/qrcode.js'
                 ]
             },
             jshint: {
@@ -113,58 +103,28 @@ module.exports = function (grunt) {
             },
             shell: {
                 nutap_lang: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/lang.js',
-                    options: {
-                        stdout: true,
-                        stderr: true,
-                        failOnError: false,
-                        warnOnError: true
-                    }
+                    command: nutap_cmd + ' ./nodeunit/tests/lang.js',
+                    options: nutap_opts
                 },
                 nutap_basic: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/basic.js',
-                    options: {
-                        stdout: true,
-                        stderr: true,
-                        failOnError: false,
-                        warnOnError: true
-                    }
+                    command: nutap_cmd + ' ./nodeunit/tests/basic.js',
+                    options: nutap_opts
                 },
                 nutap_sizes: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/sizes.js',
-                    options: {
-                        stdout: true,
-                        stderr: true,
-                        failOnError: false,
-                        warnOnError: true
-                    }
+                    command: nutap_cmd + ' ./nodeunit/tests/sizes.js',
+                    options: nutap_opts
                 },
                 nutap_myway: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/myway.js',
-                    options: {
-                        stdout: true,
-                        stderr: true,
-                        failOnError: false,
-                        warnOnError: true
-                    }
+                    command: nutap_cmd + ' ./nodeunit/tests/myway.js',
+                    options: nutap_opts
                 },
                 nutap_max: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/max.js',
-                    options: {
-                        stdout: true,
-                        stderr: true,
-                        failOnError: false,
-                        warnOnError: true
-                    }
+                    command: nutap_cmd + ' ./nodeunit/tests/max.js',
+                    options: nutap_opts
                 },
                 nutap_ver: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/versions.js',
-                    options: {
-                        stdout: true,
-                        stderr: true,
-                        failOnError: false,
-                        warnOnError: true
-                    }
+                    command: nutap_cmd + ' ./nodeunit/tests/versions.js',
+                    options: nutap_opts
                 }
             },
             karma: {
