@@ -8,17 +8,11 @@ String.prototype.bytes = function () {
     var chars = this.toString().split('');
 
     for (c = 0; c < chars.length; c += 1) {
-        if(chars[c].charCodeAt(0) > 0xFF) {
-            multibyte = true;
-        }
-    }
-
-    for (c = 0; c < chars.length; c += 1) {
 
         var char = chars[c];
         var charcode = chars[c].charCodeAt(0);
 
-        if (multibyte === true && charcode > 0x7F) {
+        if (charcode > 0x7F) {
 
             var val = charcode.toString(16);
 
