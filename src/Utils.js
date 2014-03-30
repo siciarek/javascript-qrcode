@@ -14,15 +14,13 @@ String.prototype.bytes = function () {
             val = '0' + val;
         }
 
-        if (charcode > 128) {
+        if (charcode > 0x7F) {
 
             /* jshint bitwise: false */
             var l = charcode >>> 6;
-
             var r = parseInt(charcode.toString(2).replace(new RegExp('^' + l.toString(2)), ''), 2);
-
-            l |= 192;
-            r |= 128;
+            l |= 0xC0;
+            r |= 0x80;
             /* jshint bitwise: true */
 
             bytes.push(l);
