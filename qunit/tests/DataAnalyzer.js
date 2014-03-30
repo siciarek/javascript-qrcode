@@ -59,6 +59,7 @@ test('Data Analyzer Test (mode)', function () {
     while (capacitiesDataProvider.length > 0) {
         expected = capacitiesDataProvider.shift();
         actual = analyzer.analyze(expected.data, [expected.eclevel]);
+        delete(actual.datalen);
         deepEqual(actual, expected, ['CAPACITY', expected.capacity, expected.data].toString());
     }
 
@@ -69,6 +70,7 @@ test('Data Analyzer Test (mode)', function () {
         expected = test.expected;
         actual = analyzer.analyze(test.message);
         delete(actual.capacity);
+        delete(actual.datalen);
 
         deepEqual(actual, expected, ['MODE', test.expected.mode, test.message].toString());
     }

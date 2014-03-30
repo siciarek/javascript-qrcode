@@ -85,6 +85,11 @@ module.exports = function (grunt) {
                         'nodeunit/tests/basic.js'
                     ]
                 },
+                lang: {
+                    src: [
+                        'nodeunit/tests/lang.js'
+                    ]
+                },
                 sizes: {
                     src: [
                         'nodeunit/tests/sizes.js'
@@ -109,6 +114,15 @@ module.exports = function (grunt) {
             shell: {
                 nutap_basic: {
                     command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/basic.js',
+                    options: {
+                        stdout: true,
+                        stderr: true,
+                        failOnError: false,
+                        warnOnError: true
+                    }
+                },
+                nutap_lang: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/lang.js',
                     options: {
                         stdout: true,
                         stderr: true,

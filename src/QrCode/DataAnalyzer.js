@@ -50,10 +50,11 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     'use strict';
 
     data = data || '';
+    var data_length = data.bytes().length;
 
     var defaultEcLevels = ['H', 'Q', 'M', 'L'];
 
-    if(data.length === 0) {
+    if(data_length === 0) {
         throw 'Data should contain at least one character.';
     }
 
@@ -62,6 +63,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     var result = {
         data: data,
         capacity: 0,
+        datalen: data_length,
         mode: 'binary',
         eclevel: null,
         version: 2
@@ -81,7 +83,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
 
     for(var i = 0; i < eclevels.length; i += 1) {
         var range = this.config.getCapacityRange(result.mode, eclevels[i]);
-        if(data.length >= range.min && data.length <= range.max) {
+        if(data_length >= range.min && data_length <= range.max) {
             outOfRange = false;
             break;
         }
@@ -102,7 +104,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
                 var eclevel = eclevels[c];
                 var capacity = this.config.characterCapacities[version][eclevel][result.mode];
 
-                if (data.length <= capacity) {
+                if (data_length <= capacity) {
                     result.capacity = capacity;
                     result.eclevel = eclevel;
                     result.version = parseInt(version);

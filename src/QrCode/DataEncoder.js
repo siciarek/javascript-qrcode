@@ -68,15 +68,13 @@ DataEncoder.prototype.encodeBinary = function (data) {
     'use strict';
 
     var wordSize = 8;
-    var characters = data.split('');
+    var characters = data.bytes();
     var word = null;
+    var binary;
     var output = [];
 
     for (var i = 0; i < characters.length; i += 1) {
-        var character = characters[i];
-        word = character.charCodeAt(0);
-
-        var binary = word.toString(2);
+        binary = characters[i].toString(2);
         while (binary.length < wordSize) {
             binary = '0' + binary;
         }
@@ -93,13 +91,7 @@ DataEncoder.prototype.encodeData = function (data, mode, version, ecLevel) {
 
     // Set mode indicator and character count indicator:
 
-    var modeIndicator = this.config.dataModeBitStrings[mode];
-    var characterCountIndicator = this.config.getCharacterCountIndicator(data.length, mode, version);
-
-    var bitdata = [
-        modeIndicator,
-        characterCountIndicator
-    ];
+    var bitdata = [];
 
     // Encode data for given mode:
 
@@ -115,6 +107,12 @@ DataEncoder.prototype.encodeData = function (data, mode, version, ecLevel) {
     else {
         throw 'Mode ' + mode + ' is not supported.';
     }
+
+    var modeIndicator = this.config.dataModeBitStrings[mode];
+    var characterCountIndicator = this.config.getCharacterCountIndicator(data.bytes().length, mode, version);
+
+    bitdata.unshift(characterCountIndicator);
+    bitdata.unshift(modeIndicator);
 
     var bitstring = bitdata.join('');
 

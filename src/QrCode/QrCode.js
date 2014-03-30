@@ -65,7 +65,6 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {
     }
 
     this.info.pattern = pattern;
-    this.info.datalen = this.info.data.length;
 
     maskinfo = mask.apply(pattern, this.matrix.data);
     this.matrix.data = maskinfo.data;
