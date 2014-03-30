@@ -14,6 +14,8 @@ for($p = 0; $p < $count; $p++) {
     $ret = `$cmd`;
     $ret = preg_replace("/\n$/", "", $ret);
 
+    var_dump($ret);
+
     $cmd = sprintf('identify %s/%d.pbm', $tempdir, $p);
     $info = `$cmd`;
     $info = trim($info);

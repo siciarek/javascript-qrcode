@@ -32,6 +32,13 @@
     { "data": "Sznur śliw. Chłód gąb. Pot męk. Jaźń żyć. Fe!", "lang": "Polish" },
     { "data": "ICH DALEKOPIS FALSZUJE GDY PROBY XQV NIE WYTRZYMUJE", "lang": "Polish" },
 
+    { "data": "Nechť již hříšné saxofony ďáblů rozezvučí síň úděsnými tóny waltzu, tanga a quickstepu.", "lang": "Czech" },
+    { "data": "Příliš žluťoučký kůň úpěl ďábelské ódy.", "lang": "Czech" },
+    { "data": "Hleď, toť přízračný kůň v mátožné póze šíleně úpí.", "lang": "Czech" },
+    { "data": "Zvlášť zákeřný učeň s ďolíčky běží podél zóny úlů.", "lang": "Czech" },
+    { "data": "Loď čeří kýlem tůň obzvlášť v Grónské úžině.", "lang": "Czech" },
+    { "data": "Ó, náhlý déšť již zvířil prach a čilá laň teď běží s houfcem gazel k úkrytům.", "lang": "Czech" },
+
     { "data": "Любя, съешь щипцы, - вздохнёт мэр, - кайф жгуч.", "lang": "Russian" },
     { "data": "Шеф взъярён тчк щипцы с эхом гудбай Жюль.", "lang": "Russian" },
     { "data": "Эй, жлоб! Где туз? Прячь юных съёмщиц в шкаф.", "lang": "Russian" },
@@ -42,5 +49,7 @@
     { "data": "Pack my box with five dozen liquor jugs.", "lang": "English" },
     { "data": "Jackdaws love my big sphinx of quartz", "lang": "English" },
 
+    { "data": "Ταχίστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός\nTakhístè alôpèx vaphês psèménè gè, draskelízei ypér nòthroý kynós", "lang": "Greek" },
+    { "data": "דג סקרן שט בים מאוכזב ולפתע מצא חברה", "lang": "Hebrew" },
     { "data": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.", "lang": "Latin" }
 ]
