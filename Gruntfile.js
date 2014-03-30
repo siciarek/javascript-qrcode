@@ -80,14 +80,14 @@ module.exports = function (grunt) {
                 ]
             },
             nodeunit: {
-                basic: {
-                    src: [
-                        'nodeunit/tests/basic.js'
-                    ]
-                },
                 lang: {
                     src: [
                         'nodeunit/tests/lang.js'
+                    ]
+                },
+                basic: {
+                    src: [
+                        'nodeunit/tests/basic.js'
                     ]
                 },
                 sizes: {
@@ -112,8 +112,8 @@ module.exports = function (grunt) {
                 }
             },
             shell: {
-                nutap_basic: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/basic.js',
+                nutap_lang: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/lang.js',
                     options: {
                         stdout: true,
                         stderr: true,
@@ -121,8 +121,8 @@ module.exports = function (grunt) {
                         warnOnError: true
                     }
                 },
-                nutap_lang: {
-                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/lang.js',
+                nutap_basic: {
+                    command: 'node ./node_modules/grunt-contrib-nodeunit/node_modules/nodeunit/bin/nodeunit --reporter tap ./nodeunit/tests/basic.js',
                     options: {
                         stdout: true,
                         stderr: true,
@@ -217,5 +217,5 @@ module.exports = function (grunt) {
 
 // All the tasks.
     grunt.registerTask('all', [ 'default', 'nunit' ]);
-}
-;
+
+};

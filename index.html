@@ -77,7 +77,7 @@
 
         .info div {
             display: table-cell;
-            padding-bottom: 12px;
+            padding-bottom: 8px;
         }
 
         .info div.label {
@@ -89,6 +89,7 @@
 
         .info div.data {
             white-space: pre-wrap;
+            word-break: break-all;
         }
 
         .info div.label:after {
@@ -147,9 +148,15 @@
                         </a>
                     </li>
                     <li>
-                        <a target="_blank" title="Tests" href="https://github.com/siciarek/javascript-qrcode">
+                        <a target="_blank" title="GitHub" href="https://github.com/siciarek/javascript-qrcode">
                             <i class="icon-github icon-large"></i>
                             Source on GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" title="NPM" href="https://www.npmjs.org/package/javascript-qrcode">
+                            <i class="icon-info-sign icon-large"></i>
+                            Module on NPM
                         </a>
                     </li>
                 </ul>
@@ -275,6 +282,7 @@
     var modulesize = 3;
     var quietZoneSize = 4;
     var maskPattern = null;
+    var maskTest = false;
     var version = null;
     var data = 'Pchnąć w tę łódź jeża lub ośm skrzyń fig.';
     var ecstrategy = ['M'];
@@ -320,7 +328,8 @@
             eclevel: 'Error Correction',
             pattern: 'Mask Pattern',
             capacity: 'Max Capacity',
-            datalen: 'Data Length',
+            charcount: 'Character Count',
+            datalen: 'Data Size',
             data: 'Data'
         };
 
@@ -334,6 +343,9 @@
 
                 if (key === 'eclevel') {
                     value = $('select[name="ec"]').find('option[value="' + value + '"]').text();
+                }
+                else if (key === 'datalen') {
+                    value += ' B';
                 }
 
                 html += '<li class="list-group-item"><div class="label">' + field + '</div><div class="' + key + '">' + value + '</div></li>';
@@ -394,6 +406,10 @@
         maskPattern = request.params['mp'];
     }
 
+    if (request.params.hasOwnProperty('mt')) {
+        maskTest = request.params['mt'] == 1;
+    }
+
     if (request.params.hasOwnProperty('version')) {
         version = request.params['version'];
     }
@@ -407,8 +423,11 @@
         dataOnly = dataOnly || false;
 
         try {
-            var qrcode = new QrCode(data, ecstrategy, maskPattern, version, dataOnly);
+            var qrcode = new QrCode(data, ecstrategy, maskPattern, version, dataOnly, maskTest);
             draw(qrcode, modulesize, quietZoneSize);
+
+            var info = qrcode.getInfo();
+            info.charcount = data.length;
             setInfo(qrcode.getInfo());
         }
         catch (e) {
@@ -439,7 +458,7 @@
             $('.qrcode-form select[name="version"]').append('<option value="' + o + '">' + o + '</option>');
         }
 
-        for (o = 0; o <= 8; o++) {
+        for (o = 0; o < 8; o++) {
             $('.qrcode-form select[name="mask"]').append('<option value="' + o + '">' + o + '</option>');
         }
 
@@ -478,6 +497,8 @@
                     }
                     else {
                         $('.info .list-group-item div.data').html('<em class="text-muted">empty</em>');
+                        $('.info .list-group-item div.charcount').html('<em class="text-muted">0</em>');
+                        $('.info .list-group-item div.datalen').html('<em class="text-muted">0 B</em>');
                     }
 
                     $('.form-control:focus').css(border[br]);
@@ -492,11 +513,13 @@
 
             var mask = $('.form-horizontal *[name="mask"]').val();
 
-            if (mask.trim().length === 0 || isNaN(mask)) {
-                maskPattern = null;
-            }
-            else if (mask >= 0 && mask < 8) {
+            mask = parseInt(mask);
+
+            if (!isNaN(mask) && mask >= 0 && mask < 8) {
                 maskPattern = parseInt(mask);
+            }
+            else if (isNaN(mask)) {
+                maskPattern = null;
             }
             else if (mask < 0) {
                 dataOnly = true;

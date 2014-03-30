@@ -52,7 +52,8 @@ Tiler.prototype.setArea = function (datastr) {
 
             // Place data bit only if matrix module is undefined:
             if (this.matrix.isModuleUndefined(x, y)) {
-                this.matrix.setModule(x, y, data.shift(), this.matrix.MASK_DATA);
+                var bit = data.shift();
+                this.matrix.setModule(x, y, bit, this.matrix.MASK_DATA);
             }
 
             tempy = y;

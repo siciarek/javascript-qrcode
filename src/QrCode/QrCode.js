@@ -6,19 +6,23 @@
  * @param {number|null} maskPattern force mask pattern, default null
  * @param {number} version version number
  * @param {boolean} dataOnly if no mask is to be applied
+ * @param {boolean} maskTest shows only mask
  *
  * @throws {string} Out of range Exception
  *
  * @constructor
  */
-var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {
+var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTest) {
     'use strict';
 
     data = data || '';
     ecstrategy = ecstrategy || ['M'];
-    maskPattern = maskPattern || null;
+    if(isNaN(maskPattern) || !(maskPattern >=0 && maskPattern <= 8)) {
+        maskPattern = null;
+    }
     version = version || null;
     dataOnly = dataOnly || false;
+    maskTest = maskTest || false;
 
     this.info = {};
 
@@ -66,7 +70,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly) {
 
     this.info.pattern = pattern;
 
-    maskinfo = mask.apply(pattern, this.matrix.data);
+    maskinfo = mask.apply(pattern, maskTest);
     this.matrix.data = maskinfo.data;
 };
 

@@ -1,20 +1,30 @@
 String.prototype.bytes = function () {
     'use strict';
 
-    var bytes = [];
+    var c;
+    var multibyte = false;
 
+    var bytes = [];
     var chars = this.toString().split('');
 
-    for (var c = 0; c < chars.length; c += 1) {
+    for (c = 0; c < chars.length; c += 1) {
+        if(chars[c].charCodeAt(0) > 0xFF) {
+            multibyte = true;
+        }
+    }
+
+    for (c = 0; c < chars.length; c += 1) {
+
         var char = chars[c];
         var charcode = chars[c].charCodeAt(0);
-        var val = charcode.toString(16);
 
-        while (val.length % 2) {
-            val = '0' + val;
-        }
+        if (multibyte === true && charcode > 0x7F) {
 
-        if (charcode > 0x7F) {
+            var val = charcode.toString(16);
+
+            while (val.length % 2) {
+                val = '0' + val;
+            }
 
             /* jshint bitwise: false */
             var l = charcode >>> 6;

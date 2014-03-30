@@ -13,8 +13,10 @@ Mask.prototype.constructor = Mask;
  * @param {number} pattern
  * @returns {object} mask data and evaluation results.
  */
-Mask.prototype.apply = function (pattern) {
+Mask.prototype.apply = function (pattern, maskTest) {
     'use strict';
+
+    maskTest = maskTest || false;
 
     var maskinfo = {
         evaluation: {},
@@ -22,14 +24,23 @@ Mask.prototype.apply = function (pattern) {
     };
 
     var pat = this.patterns[pattern];
+    var val, r, c;
 
-    for (var r = 0; r < this.matrix.getSize(); r += 1) {
+    if (maskTest === true) {
+        for (r = 0; r < this.matrix.data.length; r += 1) {
+            for (c = 0; c < this.matrix.data[r].length; c += 1) {
+                this.matrix.mask[r][c] = this.matrix.MASK_DATA;
+                this.matrix.data[r][c] = 0;
+            }
+        }
+    }
+
+    for (r = 0; r < this.matrix.getSize(); r += 1) {
         maskinfo.data[r] = [];
-        for (var c = 0; c < this.matrix.getSize(); c += 1) {
+        for (c = 0; c < this.matrix.getSize(); c += 1) {
             maskinfo.data[r][c] = this.matrix.data[r][c];
             if (this.matrix.mask[r][c] === this.matrix.MASK_DATA) {
-                var val = maskinfo.data[r][c];
-
+                val = maskinfo.data[r][c];
                 /* jshint bitwise: false */
                 maskinfo.data[r][c] = pat(r, c) ? val ^ 1 : val;
                 /* jshint bitwise: true */
@@ -37,11 +48,12 @@ Mask.prototype.apply = function (pattern) {
         }
     }
 
-    var formatString = this.config.getFormatString(this.matrix.eclevel, pattern);
-    var versionInformationString = this.config.getVersionInformationString(this.matrix.version);
-
-    this.matrix.setFormatInformationArea(formatString, maskinfo.data);
-    this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
+    if (maskTest === false) {
+        var formatString = this.config.getFormatString(this.matrix.eclevel, pattern);
+        var versionInformationString = this.config.getVersionInformationString(this.matrix.version);
+        this.matrix.setFormatInformationArea(formatString, maskinfo.data);
+        this.matrix.setVersionInformationArea(versionInformationString, maskinfo.data);
+    }
 
     var evaluation = new Evaluation(this.matrix);
     maskinfo.evaluation = evaluation.evaluatePattern(maskinfo.data);

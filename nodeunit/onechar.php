@@ -1,7 +1,8 @@
 <?php
 $versions = range(1, $argv[1]);
 $eclevels = ['L', 'M', 'Q', 'H'];
-$chars = ['1', 'A', 'x'];
+$chars = ['1', 'A', 'z'];
+$module_size = 2;
 
 $d = 'tmp';
 
@@ -21,7 +22,7 @@ foreach ($versions as $v) {
     foreach ($eclevels as $e) {
         foreach ($chars as $c) {
             $file = sprintf($d . '/%d-%s-%s', $v, $e, $c);
-            $cmd = sprintf('node bin/qrcode.js -n %d -e %s -d %s -o %s', $v, $e, $c, $file);
+            $cmd = sprintf('node bin/qrcode -s %d -n %d -e %s -d %s -o %s', $module_size, $v, $e, $c, $file);
             `$cmd`;
 
             $cmd = sprintf('zbarimg --set ean13.disable --quiet --raw %s.svg', $file);
