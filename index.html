@@ -141,6 +141,23 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="dropdown">
+                        <a title="Samples" class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="icon-cog icon-large"></i>
+                            Samples
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu samples">
+                            <li><a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a></li>
+                            <li><a href="#">Pchnąć w tę łódź jeża lub ośm skrzyń fig.</a></li>
+                            <li><a href="#">Любя, съешь щипцы, — вздохнёт мэр, — кайф жгуч.</a></li>
+                            <li><a href="#">El jefe buscó el éxtasis en un imprevisto baño de whisky y gozó como un duque.</a></li>
+                            <li><a href="#">川月木心火左北今名美見外成空明静海雲新語道聞強飛</a></li>
+                            <li><a href="#">דג סקרן שט בים מאוכזב ולפתע מצא חברה</a></li>
+                            <li><a href="#">키스의 고유조건은 입술끼리 만나야 하고 특별한 기술은 필요치 않다.</a></li>
+                            <li><a href="#">À noite, vovô Kowalsky vê o ímã cair no pé do pingüim queixoso e vovó põe açúcar no chá de tâmaras do jabuti feliz.</a></li>
+                        </ul>
+                    </li>
                     <li>
                         <a target="_blank" title="Tests" href="qunit/index.src.html">
                             <i class="icon-wrench icon-large"></i>
@@ -285,7 +302,7 @@
     var maskPattern = null;
     var maskTest = false;
     var version = null;
-    var data = '$, ¢, €, 𤭢 - Pchnąć w tę łódź jeża lub ośm skrzyń fig.';
+    var data = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
     var ecstrategy = ['M'];
 
@@ -453,6 +470,13 @@
     $(document).ready(function () {
 
         var o;
+
+        $('.dropdown-menu.samples').on('click', 'li a', function(e){
+            e.preventDefault();
+            var self = $(this);
+
+            $('.qrcode-form textarea').val(self.html()).trigger('keyup');
+        });
 
         $('.qrcode-form textarea').val(data);
 
