@@ -22,7 +22,7 @@ function getPbm(code, modulesize, quietZoneSize) {
     for (r = 0; r < code.length; r += 1) {
         var row = [];
 
-        for(c = 0; c < code[r].length; c += 1) {
+        for (c = 0; c < code[r].length; c += 1) {
             row.push(new Array(modulesize + 1).join(code[r][c] + ' '));
         }
 
@@ -82,6 +82,7 @@ program
     .option('-i, --input-file [file]', 'path to input data file.', null)
     .option('-o, --output-file [file]', 'path to output file.', 'qrcode')
     .option('-e, --error-correction [L|M|Q|H]', 'error correction level.', 'L')
+    .option('-m, --mask-pattern [pattern]', 'specific mask pattern, default auto.', parseInt, -100)
     .option('-n, --version-number [1-40]', 'QR Code version number.', null)
     .option('-s, --module-size [size]', 'single module size in pixels.', 3)
     .option('-z, --quiet-zone-size [size]', 'quiet zone (border) size in modules.', 4)
@@ -91,30 +92,10 @@ program
 var ecstrategy = [program.errorCorrection];
 var data = program.data;
 
-if (program.inputFile !== null) {
-    data = fs.readFileSync(program.inputFile, 'utf8', function (err) {
-        'use strict';
+try {
 
-        if (err) {
-            throw err;
-        }
-    });
-}
-
-if(data === null) {
-    program.help();
-}
-else {
-    var qrcode = new qc.QrCode(data, ecstrategy, parseInt(program.versionNumber));
-    var info = qrcode.getInfo();
-
-    var content = getContent(program.format, qrcode.getData(), parseInt(program.moduleSize), parseInt(program.quietZoneSize));
-
-    if (program.outputFile === null) {
-        console.log(content);
-    }
-    else {
-        fs.writeFile(program.outputFile + '.' + program.format, content, function (err) {
+    if (program.inputFile !== null) {
+        data = fs.readFileSync(program.inputFile, 'utf8', function (err) {
             'use strict';
 
             if (err) {
@@ -122,4 +103,38 @@ else {
             }
         });
     }
+
+    if (data === null) {
+        program.help();
+    }
+    else {
+        var maskPattern = program.maskPattern;
+
+        if(program.maskPattern === -100) {
+            maskPattern = null;
+        }
+
+        var qrcode = new qc.QrCode(data, ecstrategy, maskPattern, parseInt(program.versionNumber));
+        var info = qrcode.getInfo();
+
+        var content = getContent(program.format, qrcode.getData(), parseInt(program.moduleSize), parseInt(program.quietZoneSize));
+
+        if (program.outputFile === null) {
+            console.log(content);
+        }
+        else {
+            fs.writeFile(program.outputFile + '.' + program.format, content, function (err) {
+                'use strict';
+
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    }
+
+} catch (e) {
+    console.log('');
+    console.log('  ERROR: ' + e);
+    program.help();
 }

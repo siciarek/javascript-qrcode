@@ -17,9 +17,22 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
 
     data = data || '';
     ecstrategy = ecstrategy || ['M'];
-    if(isNaN(maskPattern) || !(maskPattern >=0 && maskPattern <= 8)) {
+
+    if(typeof parseInt(maskPattern) !== 'number') {
         maskPattern = null;
     }
+    else {
+        maskPattern = parseInt(maskPattern);
+    }
+
+    if(isNaN(maskPattern)) {
+        maskPattern = null;
+    }
+
+    if(maskPattern !== null && !(maskPattern >=0 && maskPattern < 8)) {
+        throw 'Mask pattern value out of 0..7 range.'
+    }
+
     version = version || null;
     dataOnly = dataOnly || false;
     maskTest = maskTest || false;

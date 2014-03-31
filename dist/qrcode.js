@@ -7,22 +7,41 @@ String.prototype.bytes = function () {
     var bytes = [];
     var chars = this.toString().split('');
 
-
     for (c = 0; c < chars.length; c += 1) {
 
         var charcode = chars[c].charCodeAt(0);
 
+        var multi = false;
+
+        // Json encoding uses UTF-16 like encod
+        if (charcode > 0xD800) {
+            c += 1;
+
+            multi = true;
+
+            var encoded = [charcode, chars[c].charCodeAt(0)];
+
+            var vh = encoded[0] - 0xD800;
+            var vl = encoded[1] - 0xDC00;
+
+            var v = vh << 10;
+            v |= vl;
+            v += 0x10000;
+
+            charcode = v;
+        }
+
+        var bt = [];
+
         if (charcode > 0x7F) { // Multibyte UTF-8
 
-            var prefs = [ 0x80, 0xC0, 0xE0, 0xF0 ];
+            var prefs = [ 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC ];
 
-            var bt = [];
-
-            while(true) {
+            while (true) {
                 /* jshint bitwise: false */
 
-                if(charcode < prefs[0]) {
-                    if(bt.length > 0){
+                if (multi === true && charcode === 0 || multi === false && charcode < prefs[0]) {
+                    if (bt.length > 0) {
                         charcode |= prefs[bt.length];
                     }
 
@@ -32,7 +51,7 @@ String.prototype.bytes = function () {
 
                 var b = charcode;
 
-                b &= 0x3F;
+                b &= 0x3F; // get 6 LS bits
                 b |= prefs[0];
 
                 bt.unshift(b);
@@ -42,7 +61,7 @@ String.prototype.bytes = function () {
                 /* jshint bitwise: true */
             }
 
-            while(bt.length){
+            while (bt.length) {
                 bytes.push(bt.shift());
             }
         }
@@ -3009,9 +3028,22 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
 
     data = data || '';
     ecstrategy = ecstrategy || ['M'];
-    if(isNaN(maskPattern) || !(maskPattern >=0 && maskPattern <= 8)) {
+
+    if(typeof parseInt(maskPattern) !== 'number') {
         maskPattern = null;
     }
+    else {
+        maskPattern = parseInt(maskPattern);
+    }
+
+    if(isNaN(maskPattern)) {
+        maskPattern = null;
+    }
+
+    if(maskPattern !== null && !(maskPattern >=0 && maskPattern < 8)) {
+        throw 'Mask pattern value out of 0..7 range.'
+    }
+
     version = version || null;
     dataOnly = dataOnly || false;
     maskTest = maskTest || false;

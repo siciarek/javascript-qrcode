@@ -49,7 +49,7 @@
     { "data": "Pack my box with five dozen liquor jugs.", "lang": "English" },
     { "data": "Jackdaws love my big sphinx of quartz", "lang": "English" },
 
-    { "data": "Ταχίστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός\nTakhístè alôpèx vaphês psèménè gè, draskelízei ypér nòthroý kynós", "lang": "Greek" },
+    { "data": "Ταχίστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός", "lang": "Greek" },
     { "data": "דג סקרן שט בים מאוכזב ולפתע מצא חברה", "lang": "Hebrew" },
     { "data": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.", "lang": "Latin" }
 ]
