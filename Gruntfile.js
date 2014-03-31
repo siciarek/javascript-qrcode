@@ -15,7 +15,7 @@ module.exports = function (grunt) {
             pkg: pkg,
             // Before generating new test files, remove any previously-created files.
             clean: {
-                tests: ['tmp'],
+                test: ['tmp'],
                 tidy: ['*.svg', '*.png', '*.pdf', 'temp.*']
             },
             concat: {
