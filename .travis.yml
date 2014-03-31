@@ -7,4 +7,6 @@ before_install:
     - npm install -g grunt-cli
     - sudo apt-get install zbar-tools
     - zbarimg --version
+    - sudo apt-get install imagemagick
+    - convert --version
 
