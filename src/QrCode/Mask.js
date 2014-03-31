@@ -10,7 +10,9 @@ Mask.prototype.constructor = Mask;
 /**
  * Applies mask
  *
- * @param {number} pattern
+ * @param {number} pattern number of specific mask pattern.
+ * @param {boolean} maskTest flag to show mask applied on empty grid.
+ *
  * @returns {object} mask data and evaluation results.
  */
 Mask.prototype.apply = function (pattern, maskTest) {

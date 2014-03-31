@@ -14,9 +14,8 @@ var GeneratorPolynominal = function () {
 
 GeneratorPolynominal.prototype.constructor = GeneratorPolynominal;
 
-GeneratorPolynominal.prototype.createLogAndAntilog = function (exp) {
+GeneratorPolynominal.prototype.createLogAndAntilog = function () {
     'use strict';
-
 
     for (var i = 0; i < 256; i += 1) {
         var a = 1;

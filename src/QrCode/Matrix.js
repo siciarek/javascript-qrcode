@@ -4,7 +4,7 @@ var Matrix = function (version, eclevel) {
     this.config = new Config();
 
     if (typeof version === 'undefined' || isNaN(parseInt(version))) {
-        throw 'Invalid version number.';
+        throw new InvalidVersionNumberException();
     }
 
     this.DATA_UNDEFINED_MODULE = 7;

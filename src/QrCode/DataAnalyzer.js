@@ -55,7 +55,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     var defaultEcLevels = ['H', 'Q', 'M', 'L'];
 
     if(data_length === 0) {
-        throw 'Data should contain at least one character.';
+        throw new EmptyDataException();
     }
 
     eclevels = eclevels || defaultEcLevels;
@@ -90,7 +90,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     }
 
     if(outOfRange === true) {
-        throw 'Data size is out of supported range.';
+        throw new DataOutOfRangeException();
     }
 
     for (var version in this.config.characterCapacities) {

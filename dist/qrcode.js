@@ -2,7 +2,6 @@ String.prototype.bytes = function () {
     'use strict';
 
     var c;
-    var multibyte = false;
 
     var bytes = [];
     var chars = this.toString().split('');
@@ -24,9 +23,11 @@ String.prototype.bytes = function () {
             var vh = encoded[0] - 0xD800;
             var vl = encoded[1] - 0xDC00;
 
+            /* jshint bitwise: false */
             var v = vh << 10;
             v |= vl;
             v += 0x10000;
+            /* jshint bitwise: true */
 
             charcode = v;
         }
@@ -1623,7 +1624,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     var defaultEcLevels = ['H', 'Q', 'M', 'L'];
 
     if(data_length === 0) {
-        throw 'Data should contain at least one character.';
+        throw new EmptyDataException();
     }
 
     eclevels = eclevels || defaultEcLevels;
@@ -1658,7 +1659,7 @@ DataAnalyzer.prototype.analyze = function (data, eclevels) {
     }
 
     if(outOfRange === true) {
-        throw 'Data size is out of supported range.';
+        throw new DataOutOfRangeException();
     }
 
     for (var version in this.config.characterCapacities) {
@@ -1761,7 +1762,6 @@ DataEncoder.prototype.encodeBinary = function (data) {
 
     var wordSize = 8;
     var characters = data.bytes();
-    var word = null;
     var binary;
     var output = [];
 
@@ -1797,7 +1797,7 @@ DataEncoder.prototype.encodeData = function (data, mode, version, ecLevel) {
         bitdata = bitdata.concat(this.encodeBinary(data));
     }
     else {
-        throw 'Mode ' + mode + ' is not supported.';
+        throw new NotSupportedModeException(mode);
     }
 
     var modeIndicator = this.config.dataModeBitStrings[mode];
@@ -2316,6 +2316,114 @@ Evaluation.prototype.rules = {
 
 
 /**
+ * Invalid Out Of Range
+ */
+var OutOfRangeException = function(message) {
+    'use strict';
+
+    message = message || 'Value is out of range.';
+    this.message = message;
+};
+
+OutOfRangeException.prototype.constructor = OutOfRangeException;
+
+OutOfRangeException.prototype.toString = function() {
+    'use strict';
+
+    return this.message;
+};
+
+/**
+ * Not supported mode.
+ */
+var NotSupportedModeException = function(mode) {
+    'use strict';
+
+    this.message = 'Mode ' + mode + ' is not supported.';
+};
+
+NotSupportedModeException.prototype.constructor = NotSupportedModeException;
+
+NotSupportedModeException.prototype.toString = function() {
+    'use strict';
+
+    return this.message;
+};
+
+/**
+ * Invalid Error Correction Level
+ */
+var InvalidErrorCorrectionLevelException = function(message) {
+    'use strict';
+
+    message = message || 'Invalid Error Correction Level, only L, M, Q or H is supported.';
+    this.message = message;
+};
+
+InvalidErrorCorrectionLevelException.prototype.constructor = InvalidErrorCorrectionLevelException;
+
+InvalidErrorCorrectionLevelException.prototype.toString = function() {
+    'use strict';
+
+    return this.message;
+};
+
+/**
+ * Invalid Version Number
+ */
+var InvalidVersionNumberException = function(message) {
+    'use strict';
+
+    message = message || 'Invalid Version number, only 1-40 is supported.';
+    this.message = message;
+};
+
+InvalidVersionNumberException.prototype.constructor = InvalidVersionNumberException;
+
+InvalidVersionNumberException.prototype.toString = function() {
+    'use strict';
+
+    return this.message;
+};
+
+
+/**
+ * Empty Data
+ */
+var EmptyDataException = function(message) {
+    'use strict';
+
+    message = message || 'Data should contain at least one character.';
+    this.message = message;
+};
+
+EmptyDataException.prototype.constructor = EmptyDataException;
+
+EmptyDataException.prototype.toString = function() {
+    'use strict';
+
+    return this.message;
+};
+
+/**
+ * Data out of Range
+ */
+var DataOutOfRangeException = function(message) {
+    'use strict';
+
+    message = message || 'Data size is out of supported range.';
+    this.message = message;
+};
+
+DataOutOfRangeException.prototype.constructor = DataOutOfRangeException;
+
+DataOutOfRangeException.prototype.toString = function() {
+    'use strict';
+
+    return this.message;
+};
+
+/**
  * Generator polynominal
  *
  * @constructor
@@ -2331,9 +2439,8 @@ var GeneratorPolynominal = function () {
 
 GeneratorPolynominal.prototype.constructor = GeneratorPolynominal;
 
-GeneratorPolynominal.prototype.createLogAndAntilog = function (exp) {
+GeneratorPolynominal.prototype.createLogAndAntilog = function () {
     'use strict';
-
 
     for (var i = 0; i < 256; i += 1) {
         var a = 1;
@@ -2458,7 +2565,9 @@ Mask.prototype.constructor = Mask;
 /**
  * Applies mask
  *
- * @param {number} pattern
+ * @param {number} pattern number of specific mask pattern.
+ * @param {boolean} maskTest flag to show mask applied on empty grid.
+ *
  * @returns {object} mask data and evaluation results.
  */
 Mask.prototype.apply = function (pattern, maskTest) {
@@ -2550,7 +2659,7 @@ var Matrix = function (version, eclevel) {
     this.config = new Config();
 
     if (typeof version === 'undefined' || isNaN(parseInt(version))) {
-        throw 'Invalid version number.';
+        throw new InvalidVersionNumberException();
     }
 
     this.DATA_UNDEFINED_MODULE = 7;
@@ -3028,6 +3137,23 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
 
     data = data || '';
     ecstrategy = ecstrategy || ['M'];
+    version = version || null;
+    dataOnly = dataOnly || false;
+    maskTest = maskTest || false;
+
+    // Error correction validation:
+
+    if(toString.call(ecstrategy) !== '[object Array]') {
+        throw new InvalidErrorCorrectionLevelException();
+    }
+
+    ecstrategy.forEach(function(e){
+        if(e.match(/^[LMQH]$/i) === null) {
+            throw new InvalidErrorCorrectionLevelException();
+        }
+    });
+
+    // Mask pattern validation:
 
     if(typeof parseInt(maskPattern) !== 'number') {
         maskPattern = null;
@@ -3041,12 +3167,14 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
     }
 
     if(maskPattern !== null && !(maskPattern >=0 && maskPattern < 8)) {
-        throw 'Mask pattern value out of 0..7 range.'
+        throw new OutOfRangeException('Mask pattern value is out of 0..7 range.');
     }
 
-    version = version || null;
-    dataOnly = dataOnly || false;
-    maskTest = maskTest || false;
+    // Version validation:
+
+    if(version !== null && typeof parseInt(version) !== 'number') {
+        throw new InvalidVersionNumberException();
+    }
 
     this.info = {};
 

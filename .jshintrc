@@ -111,6 +111,15 @@
 
     "maxerr"        : 100,      // Maximum errors before stopping.
     "globals"        : {        // Globals.
+        "toString": true,
+
+        "EmptyDataException": true,
+        "DataOutOfRangeException": true,
+        "NotSupportedModeException": true,
+        "InvalidErrorCorrectionLevelException": true,
+        "OutOfRangeException": true,
+        "InvalidVersionNumberException": true,
+        
         "module": true,
         "Evaluation": true,
         "Tiler": true,

@@ -2,7 +2,6 @@ String.prototype.bytes = function () {
     'use strict';
 
     var c;
-    var multibyte = false;
 
     var bytes = [];
     var chars = this.toString().split('');
@@ -24,9 +23,11 @@ String.prototype.bytes = function () {
             var vh = encoded[0] - 0xD800;
             var vl = encoded[1] - 0xDC00;
 
+            /* jshint bitwise: false */
             var v = vh << 10;
             v |= vl;
             v += 0x10000;
+            /* jshint bitwise: true */
 
             charcode = v;
         }

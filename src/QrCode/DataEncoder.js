@@ -69,7 +69,6 @@ DataEncoder.prototype.encodeBinary = function (data) {
 
     var wordSize = 8;
     var characters = data.bytes();
-    var word = null;
     var binary;
     var output = [];
 
@@ -105,7 +104,7 @@ DataEncoder.prototype.encodeData = function (data, mode, version, ecLevel) {
         bitdata = bitdata.concat(this.encodeBinary(data));
     }
     else {
-        throw 'Mode ' + mode + ' is not supported.';
+        throw new NotSupportedModeException(mode);
     }
 
     var modeIndicator = this.config.dataModeBitStrings[mode];

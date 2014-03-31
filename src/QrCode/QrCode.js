@@ -17,6 +17,23 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
 
     data = data || '';
     ecstrategy = ecstrategy || ['M'];
+    version = version || null;
+    dataOnly = dataOnly || false;
+    maskTest = maskTest || false;
+
+    // Error correction validation:
+
+    if(toString.call(ecstrategy) !== '[object Array]') {
+        throw new InvalidErrorCorrectionLevelException();
+    }
+
+    ecstrategy.forEach(function(e){
+        if(e.match(/^[LMQH]$/i) === null) {
+            throw new InvalidErrorCorrectionLevelException();
+        }
+    });
+
+    // Mask pattern validation:
 
     if(typeof parseInt(maskPattern) !== 'number') {
         maskPattern = null;
@@ -30,12 +47,14 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
     }
 
     if(maskPattern !== null && !(maskPattern >=0 && maskPattern < 8)) {
-        throw 'Mask pattern value out of 0..7 range.'
+        throw new OutOfRangeException('Mask pattern value is out of 0..7 range.');
     }
 
-    version = version || null;
-    dataOnly = dataOnly || false;
-    maskTest = maskTest || false;
+    // Version validation:
+
+    if(version !== null && typeof parseInt(version) !== 'number') {
+        throw new InvalidVersionNumberException();
+    }
 
     this.info = {};
 
