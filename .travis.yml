@@ -9,4 +9,5 @@ before_install:
     - zbarimg --version
     - sudo apt-get install imagemagick
     - convert --version
+    - php --version
 
