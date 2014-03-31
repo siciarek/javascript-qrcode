@@ -170,12 +170,8 @@ module.exports = function (grunt) {
 
 // Test tasks.
     grunt.registerTask('nunit', [ 'build', 'clean:test', 'nodeunit' ]);
-    grunt.registerTask('test', [ 'jshint', 'qunit' ]);
+    grunt.registerTask('test', [ 'jshint', 'qunit', 'nunit' ]);
 
 // Default task.
     grunt.registerTask('default', [ 'build', 'test' ]);
-
-// All the tasks.
-    grunt.registerTask('all', [ 'default', 'nunit' ]);
-
 };
