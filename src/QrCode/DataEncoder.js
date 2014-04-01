@@ -261,6 +261,7 @@ DataEncoder.prototype.terminator = function (len, version, ecLevel) {
 
     var terminator = '0000';
     var blockInfo = this.config.getBlockInfo(version, ecLevel);
+
     var numberOfDataCodewords = blockInfo[0];
     var numberOfDataBits = numberOfDataCodewords * 8;
     var diff = numberOfDataBits - len;

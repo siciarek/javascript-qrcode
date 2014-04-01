@@ -125,6 +125,10 @@ Config.prototype.getBlockInfo = function (version, correctionLevel) {
 
     var key = version + '-' + correctionLevel;
 
+    if(!(version !== null && correctionLevel !== null)) {
+        throw new InvalidVersionNumberException();
+    }
+
     return this.dataSizeInfo[key];
 };
 Config.prototype.getCharacterCountIndicator = function(characterCount, mode, version) {

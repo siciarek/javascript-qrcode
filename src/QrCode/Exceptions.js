@@ -57,7 +57,7 @@ InvalidErrorCorrectionLevelException.prototype.toString = function() {
 var InvalidVersionNumberException = function(message) {
     'use strict';
 
-    message = message || 'Invalid Version number, only 1-40 is supported.';
+    message = message || 'Invalid Version number.';
     this.message = message;
 };
 
