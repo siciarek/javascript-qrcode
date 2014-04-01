@@ -177,7 +177,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [ 'concat', 'uglify', 'compare_size' ]);
 
 // Test tasks.
-    grunt.registerTask('nunit', [ 'build', 'clean:test', 'nodeunit' ]);
+    grunt.registerTask('nunit', [ 'build', 'nodeunit' ]);
     grunt.registerTask('test', [ 'jshint', 'qunit', 'nodeunit:rw' ]);
 
 // Default task.

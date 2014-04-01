@@ -7,7 +7,10 @@ var timeout = 10000;
 
 var mkdirp = require('mkdirp');
 var fs = require('fs');
+var prefix = Math.floor(Math.random() * 1000000);
+var tmpdir = 'tmp/' + prefix;
 
+var output = [];
 
 module.exports = {
 
@@ -15,7 +18,6 @@ module.exports = {
 
         t.expect(expect.write);
 
-        var tmpdir = 'tmp';
         var dataFile = __dirname + '/../data/' + dataSrc;
 
         mkdirp(tmpdir, function (err) {
@@ -40,12 +42,16 @@ module.exports = {
                     test = qrcodeDataProvider[i];
                     spawn('node', [
                         'bin/qrcode',
-                        '-o', 'tmp/' + i,
+                        '-o', tmpdir + '/' + i,
                         '-d', test.data
                     ]);
+
                     t.ok(true, test.name);
                 }
-                t.done();
+
+                setTimeout(function () {
+                    t.done();
+                }, timeout);
             }
         );
     },
@@ -54,7 +60,6 @@ module.exports = {
 
         t.expect(expect.read);
 
-        var tmpdir = 'tmp';
         var dataFile = __dirname + '/../data/' + dataSrc;
 
         mkdirp(tmpdir, function (err) {
@@ -75,12 +80,12 @@ module.exports = {
                 var i, test, exec = require('child_process').exec,
                     child;
 
-                var output = [];
-
                 for (i = 0; i < qrcodeDataProvider.length; i += 1) {
                     test = qrcodeDataProvider[i];
 
-                    child = exec('zbarimg --quiet --raw ' + __dirname + '/../../tmp/' + i + '.svg',
+                    var file = __dirname + '/../../' + tmpdir + '/' + i + '.svg';
+
+                    child = exec('zbarimg --quiet --raw ' + file,
                         function (error, stdout, stderr) {
                             var result = stdout.replace(/\n$/, '');
                             output.push(result);
@@ -91,10 +96,11 @@ module.exports = {
                 setTimeout(function () {
                     t.deepEqual(output.length, qrcodeDataProvider.length, 'Size');
 
-                    for (var p = 0; p < qrcodeDataProvider.length; p++) {
-                        for (var o = 0; o < output.length; o++) {
+                    for (var o = 0; o < output.length; o++) {
+                        var actual = output[o];
+                        for (var p = 0; p < qrcodeDataProvider.length; p++) {
                             var expected = qrcodeDataProvider[p].data;
-                            var actual = output[o];
+
                             if (expected === actual) {
                                 t.deepEqual(actual, expected, '' + p);
                             }
