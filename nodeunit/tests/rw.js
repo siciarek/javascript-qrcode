@@ -3,7 +3,7 @@ var expect = {
     write: 11,
     read: 12
 };
-var timeout = 4000;
+var timeout = 10000;
 
 var mkdirp = require('mkdirp');
 var fs = require('fs');
