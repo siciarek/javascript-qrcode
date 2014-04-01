@@ -159,6 +159,58 @@ Matrix.prototype.setReservedAreas = function () {
     this.setVersionInformationArea();
 };
 
+Matrix.prototype.setDataArea = function (datastr) {
+    'use strict';
+
+    var UP = -1;
+    var DOWN = 1;
+    var direction = UP;
+
+    // Start at the last module:
+    var x = this.getSize() - 1;
+    var y = this.getSize() - 1;
+    var tempy = y;
+
+    var data = datastr.split('').parseInt();
+    var bit;
+
+    while (data.length > 0) {
+
+        // Check if matrix bottom or top is reached:
+        if (!(y >= 0 && y < this.getSize())) {
+
+            x -= 2;
+            y = tempy;
+
+            // Switch move direction when code area boundary is reached:
+            direction = direction === UP ? DOWN : UP;
+
+            // Left timing pattern exception:
+            if (x === 6) {
+                x -= 1;
+            }
+        }
+
+        // Place data bit only if current module is undefined:
+        if (this.isModuleUndefined(x, y)) {
+            bit = data.shift();
+            this.setModule(x, y, bit, this.MASK_DATA);
+        }
+
+        x -= 1;
+
+        if (this.isModuleUndefined(x, y)) {
+            bit = data.shift();
+            this.setModule(x, y, bit, this.MASK_DATA);
+        }
+
+        x += 1;
+
+        tempy = y;
+        y += direction;
+    }
+};
+
 Matrix.prototype.setFormatInformationArea = function (formatInformationString, data) {
     'use strict';
 

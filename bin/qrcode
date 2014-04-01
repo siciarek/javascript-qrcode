@@ -84,8 +84,8 @@ program
     .option('-e, --error-correction [L|M|Q|H]', 'error correction level.', 'L')
     .option('-m, --mask-pattern [pattern]', 'specific mask pattern, default auto.', parseInt, -100)
     .option('-n, --version-number [1-40]', 'QR Code version number.', null)
-    .option('-s, --module-size [size]', 'single module size in pixels.', 3)
-    .option('-z, --quiet-zone-size [size]', 'quiet zone (border) size in modules.', 4)
+    .option('-s, --module-size [size]', 'single module size in pixels.', parseInt, 3)
+    .option('-z, --quiet-zone-size [size]', 'quiet zone (border) size in modules.', parseInt, 4)
     .option('-f, --format [format]', 'image file format (svg, pbm).', 'svg')
     .parse(process.argv);
 

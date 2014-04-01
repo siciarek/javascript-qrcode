@@ -1,4 +1,4 @@
-test('Tiler Test', function () {
+test('Setting Data Area Test', function () {
 
     var test, expected, actual;
 
@@ -14,9 +14,7 @@ test('Tiler Test', function () {
         this.matrix = new Matrix(info.version, info.eclevel);
         this.matrix.setStaticAreas();
         this.matrix.setReservedAreas();
-
-        tiler = new Tiler(this.matrix);
-        tiler.setArea(datastr);
+        this.matrix.setDataArea(datastr);
 
         actual = this.matrix.getData();
         expected = test.matrix;

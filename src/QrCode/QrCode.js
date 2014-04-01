@@ -72,9 +72,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
     this.matrix = new Matrix(this.info.version, this.info.eclevel);
     this.matrix.setStaticAreas();
     this.matrix.setReservedAreas();
-
-    tiler = new Tiler(this.matrix);
-    tiler.setArea(datastr);
+    this.matrix.setDataArea(datastr);
 
     if(dataOnly === true) {
         return;
