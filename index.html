@@ -389,6 +389,8 @@
         var size = code.getSize() * blocksize + 2 * quietZone;
         var grid = code.getData();
 
+        console.log(grid.toSource());
+
         var canvas = document.getElementById('canvas');
         canvas.setAttribute('width', size);
         canvas.setAttribute('height', size);
