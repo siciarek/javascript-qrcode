@@ -1,7 +1,7 @@
 {
   "name": "javascript-qrcode",
   "description": "Quick Response Code (QR-Code) Model 2 generator in plain javascript.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "repository": {
     "type": "git",
     "url": "git://github.com/siciarek/javascript-qrcode.git"
