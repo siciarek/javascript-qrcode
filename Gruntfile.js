@@ -100,6 +100,11 @@ module.exports = function (grunt) {
                     src: [
                         'nodeunit/tests/versions.js'
                     ]
+                },
+                rw: {
+                    src: [
+                        'nodeunit/tests/rw.js'
+                    ]
                 }
             },
             shell: {
@@ -125,6 +130,10 @@ module.exports = function (grunt) {
                 },
                 nutap_ver: {
                     command: nutap_cmd + ' ./nodeunit/tests/versions.js',
+                    options: nutap_opts
+                },
+                nutap_rw: {
+                    command: nutap_cmd + ' ./nodeunit/tests/rw.js',
                     options: nutap_opts
                 }
             },
@@ -169,7 +178,7 @@ module.exports = function (grunt) {
 
 // Test tasks.
     grunt.registerTask('nunit', [ 'build', 'clean:test', 'nodeunit' ]);
-    grunt.registerTask('test', [ 'jshint', 'qunit' ]);
+    grunt.registerTask('test', [ 'jshint', 'qunit', 'nodeunit:rw' ]);
 
 // Default task.
     grunt.registerTask('default', [ 'build', 'test' ]);
