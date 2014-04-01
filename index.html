@@ -504,6 +504,20 @@
 
                     $('#generate-qrcode').trigger('click');
                 })
+                .on('focus', 'textarea', function () {
+                    var self = $(this);
+                    var val = self.val();
+                    self.attr('tempval', val);
+                    self.val('');
+                })
+                .on('blur', 'textarea', function () {
+                    var self = $(this);
+                    var val = self.val();
+                    if(val.trim().length === 0) {
+                        self.val(self.attr('tempval'));
+                    }
+                    self.removeAttr('tempval');
+                })
                 .on('keyup', 'textarea', function () {
 
                     var border = {
