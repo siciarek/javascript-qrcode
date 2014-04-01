@@ -19,7 +19,8 @@ Usage
 -----
 
 Webpage example:
-```
+
+```html
 <script src="dist/qrcode.min.js"></script>
 
 <script>
@@ -32,7 +33,7 @@ var matrix = qrcode.getData(); // returns binary matrix [0, 1]
 ```
 
 CLI example:
-```
+```bash
 
 $ npm install javascript-qrcode
 
