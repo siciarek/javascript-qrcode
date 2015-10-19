@@ -23,7 +23,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
 
     // Error correction validation:
 
-    if(toString.call(ecstrategy) !== '[object Array]') {
+    if(ecstrategy.constructor !== Array) {
         throw new InvalidErrorCorrectionLevelException();
     }
 
