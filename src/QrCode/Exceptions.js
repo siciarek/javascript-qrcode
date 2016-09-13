@@ -8,13 +8,20 @@ var OutOfRangeException = function(message) {
     this.message = message;
 };
 
-OutOfRangeException.prototype.constructor = OutOfRangeException;
+Object.defineProperties(OutOfRangeException.prototype, {
+    'constructor': {
+        value: OutOfRangeException,
+        enumerable: false,
+    },
+    'toString': {
+        value: function() {
+            'use strict';
 
-OutOfRangeException.prototype.toString = function() {
-    'use strict';
-
-    return this.message;
-};
+            return this.message;
+        },
+        enumerable: false,
+    }
+});
 
 /**
  * Not supported mode.
@@ -25,13 +32,20 @@ var NotSupportedModeException = function(mode) {
     this.message = 'Mode ' + mode + ' is not supported.';
 };
 
-NotSupportedModeException.prototype.constructor = NotSupportedModeException;
+Object.defineProperties(NotSupportedModeException.prototype, {
+    'constructor': {
+        value: NotSupportedModeException,
+        enumerable: false,
+    },
+    'toString': {
+        value: function() {
+            'use strict';
 
-NotSupportedModeException.prototype.toString = function() {
-    'use strict';
-
-    return this.message;
-};
+            return this.message;
+        },
+        enumerable: false,
+    }
+});
 
 /**
  * Invalid Error Correction Level
@@ -43,13 +57,20 @@ var InvalidErrorCorrectionLevelException = function(message) {
     this.message = message;
 };
 
-InvalidErrorCorrectionLevelException.prototype.constructor = InvalidErrorCorrectionLevelException;
+Object.defineProperties(InvalidErrorCorrectionLevelException.prototype, {
+    'constructor': {
+        value: InvalidErrorCorrectionLevelException,
+        enumerable: false,
+    },
+    'toString': {
+        value: function() {
+            'use strict';
 
-InvalidErrorCorrectionLevelException.prototype.toString = function() {
-    'use strict';
-
-    return this.message;
-};
+            return this.message;
+        },
+        enumerable: false,
+    }
+});
 
 /**
  * Invalid Version Number
@@ -61,14 +82,20 @@ var InvalidVersionNumberException = function(message) {
     this.message = message;
 };
 
-InvalidVersionNumberException.prototype.constructor = InvalidVersionNumberException;
+Object.defineProperties(InvalidVersionNumberException.prototype, {
+    'constructor': {
+        value: InvalidVersionNumberException,
+        enumerable: false,
+    },
+    'toString': {
+        value: function() {
+            'use strict';
 
-InvalidVersionNumberException.prototype.toString = function() {
-    'use strict';
-
-    return this.message;
-};
-
+            return this.message;
+        },
+        enumerable: false,
+    }
+});
 
 /**
  * Empty Data
@@ -80,13 +107,20 @@ var EmptyDataException = function(message) {
     this.message = message;
 };
 
-EmptyDataException.prototype.constructor = EmptyDataException;
+Object.defineProperties(EmptyDataException.prototype, {
+    'constructor': {
+        value: EmptyDataException,
+        enumerable: false,
+    },
+    'toString': {
+        value: function() {
+            'use strict';
 
-EmptyDataException.prototype.toString = function() {
-    'use strict';
-
-    return this.message;
-};
+            return this.message;
+        },
+        enumerable: false,
+    }
+});
 
 /**
  * Data out of Range
@@ -97,11 +131,17 @@ var DataOutOfRangeException = function(message) {
     message = message || 'Data size is out of supported range.';
     this.message = message;
 };
+Object.defineProperties(DataOutOfRangeException.prototype, {
+    'constructor': {
+        value: DataOutOfRangeException,
+        enumerable: false,
+    },
+    'toString': {
+        value: function() {
+            'use strict';
 
-DataOutOfRangeException.prototype.constructor = DataOutOfRangeException;
-
-DataOutOfRangeException.prototype.toString = function() {
-    'use strict';
-
-    return this.message;
-};
+            return this.message;
+        },
+        enumerable: false,
+    }
+});

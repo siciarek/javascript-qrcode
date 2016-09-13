@@ -6,6 +6,7 @@ test('Evaluation Test', function () {
     while(evaluationRoleDataProvider.length > 0) {
         test = evaluationRoleDataProvider.shift();
         expected = test.result;
+        console.log(JSON.stringify(test));
         actual = evaluation.rules[test.rule](test.data);
 
         deepEqual(actual, expected, ['Evaluation Rule #' + test.rule].toString());

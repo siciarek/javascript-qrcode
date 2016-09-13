@@ -12,7 +12,7 @@
  *
  * @constructor
  */
-var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTest) {
+var QrCode = function(data, ecstrategy, maskPattern, version, dataOnly, maskTest) {
     'use strict';
 
     data = data || '';
@@ -23,36 +23,35 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
 
     // Error correction validation:
 
-    if(ecstrategy.constructor !== Array) {
+    if (ecstrategy.constructor !== Array) {
         throw new InvalidErrorCorrectionLevelException();
     }
 
-    ecstrategy.forEach(function(e){
-        if(e.match(/^[LMQH]$/i) === null) {
+    ecstrategy.forEach(function(e) {
+        if (e.match(/^[LMQH]$/i) === null) {
             throw new InvalidErrorCorrectionLevelException();
         }
     });
 
     // Mask pattern validation:
 
-    if(typeof parseInt(maskPattern) !== 'number') {
+    if (typeof parseInt(maskPattern) !== 'number') {
         maskPattern = null;
-    }
-    else {
+    } else {
         maskPattern = parseInt(maskPattern);
     }
 
-    if(isNaN(maskPattern)) {
+    if (isNaN(maskPattern)) {
         maskPattern = null;
     }
 
-    if(maskPattern !== null && !(maskPattern >=0 && maskPattern < 8)) {
+    if (maskPattern !== null && !(maskPattern >= 0 && maskPattern < 8)) {
         throw new OutOfRangeException('Mask pattern value is out of 0..7 range.');
     }
 
     // Version validation:
 
-    if(version !== null && typeof parseInt(version) !== 'number') {
+    if (version !== null && typeof parseInt(version) !== 'number') {
         throw new InvalidVersionNumberException();
     }
 
@@ -74,7 +73,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
     this.matrix.setReservedAreas();
     this.matrix.setDataArea(datastr);
 
-    if(dataOnly === true) {
+    if (dataOnly === true) {
         return;
     }
 
@@ -92,8 +91,7 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
 
         results = results.sort();
         pattern = evaluations[results[0]];
-    }
-    else {
+    } else {
         pattern = parseInt(maskPattern);
         pattern = isNaN(pattern) ? 0 : pattern;
     }
@@ -104,20 +102,29 @@ var QrCode = function (data, ecstrategy, maskPattern, version, dataOnly, maskTes
     this.matrix.data = maskinfo.data;
 };
 
-QrCode.prototype.getInfo = function () {
-    'use strict';
+Object.defineProperties(QrCode.prototype, {
+    'getInfo': {
+        value: function() {
+            'use strict';
 
-    return this.info;
-};
+            return this.info;
+        },
+        enumerable: false,
+    },
+    'getData': {
+        value: function() {
+            'use strict';
 
-QrCode.prototype.getData = function () {
-    'use strict';
+            return this.matrix.getData();
+        },
+        enumerable: false,
+    },
+    'getSize': {
+        value: function() {
+            'use strict';
 
-    return this.matrix.getData();
-};
-
-QrCode.prototype.getSize = function () {
-    'use strict';
-
-    return this.matrix.getSize();
-};
+            return this.matrix.getSize();
+        },
+        enumerable: false,
+    },
+});
